@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Lat:</b>
+  <%= @tmp_lat_long.lat %>
+</p>
+
+<p>
+  <b>Long:</b>
+  <%= @tmp_lat_long.long %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @tmp_lat_long.type %>
+</p>
+
+<p>
+  <b>Keyval:</b>
+  <%= @tmp_lat_long.keyval %>
+</p>
+
+
+<%= link_to 'Edit', edit_tmp_lat_long_path(@tmp_lat_long) %> |
+<%= link_to 'Back', tmp_lat_longs_path %>

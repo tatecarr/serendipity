@@ -1,0 +1,29 @@
+<h1>Listing tmp_lat_longs</h1>
+
+<table>
+  <tr>
+    <th>Lat</th>
+    <th>Long</th>
+    <th>Type</th>
+    <th>Keyval</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tmp_lat_longs.each do |tmp_lat_long| %>
+  <tr>
+    <td><%= tmp_lat_long.lat %></td>
+    <td><%= tmp_lat_long.long %></td>
+    <td><%= tmp_lat_long.type %></td>
+    <td><%= tmp_lat_long.keyval %></td>
+    <td><%= link_to 'Show', tmp_lat_long %></td>
+    <td><%= link_to 'Edit', edit_tmp_lat_long_path(tmp_lat_long) %></td>
+    <td><%= link_to 'Destroy', tmp_lat_long, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Tmp lat long', new_tmp_lat_long_path %>

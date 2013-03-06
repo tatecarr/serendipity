@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  lat: 
+  long: 9.99
+  type: 
+  keyval: 1
+
+two:
+  lat: 
+  long: 9.99
+  type: 
+  keyval: 1
