@@ -1,6 +1,5 @@
 Serendipity::Application.routes.draw do
-  devise_for :users
-
+  
   resources :tmp_lat_longs
 
 
@@ -61,6 +60,8 @@ Serendipity::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
 
+
+  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
 
   devise_scope :user do
     get "login", :to => "devise/sessions#new"

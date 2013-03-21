@@ -9,8 +9,14 @@
 <body>
 
 
-	<%= current_user.email if current_user %>
-	<%= link_to 'Logout', logout_path, :method => 'delete' %>
+	<% if current_user %>
+		Email: <%= current_user.email %><br/>
+		Provider: <%= current_user.provider %><br/>
+		UID: <%= current_user.uid %>
+	<% end %>
+
+	<%= link_to 'Logout', logout_path, :method => 'delete' %> | 
+	<%= link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook) %>
 	
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
