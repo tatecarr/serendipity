@@ -241,11 +241,12 @@ Devise.setup do |config|
 
   require 'omniauth-facebook'
 
+  scope_string = 'email,user_birthday,read_stream'
   if Rails.env.development?
     OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-    config.omniauth :facebook, '116727348513790', '07a38079493be0de33db7a8bccc036ae', :display => 'popup'
+    config.omniauth :facebook, '116727348513790', '07a38079493be0de33db7a8bccc036ae', :scope => scope_string, :display => 'popup'
   else
-    config.omniauth :facebook, '477591402289002', '28741d492123d461fb81c1c750c06c76', :display => 'popup'
+    config.omniauth :facebook, '477591402289002', '28741d492123d461fb81c1c750c06c76', :scope => scope_string, :display => 'popup'
   end
 
 

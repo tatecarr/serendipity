@@ -11,6 +11,7 @@
 
 	<% if current_user %>
 		Email: <%= current_user.email %><br/>
+		<%= image_tag @picture_url %><br/>
 		Provider: <%= current_user.provider %><br/>
 		UID: <%= current_user.uid %>
 	<% end %>

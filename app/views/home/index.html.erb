@@ -1,1 +1,12 @@
 <h1>Home controller index</h1>
+
+<table>
+
+	<% @friends.each do |f| %>
+		<tr>
+			<td><%= link_to f.name, 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %><td>
+			<td><%= link_to image_tag('https://graph.facebook.com/'+f.raw_attributes['id']+'/picture'), 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %></td>
+		</tr>
+	<% end %>
+
+</table>

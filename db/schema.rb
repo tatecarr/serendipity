@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321161209) do
+ActiveRecord::Schema.define(:version => 20130327160716) do
 
   create_table "tmp_lat_longs", :force => true do |t|
     t.decimal  "lat",        :precision => 12, :scale => 4
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20130321161209) do
     t.datetime "updated_at",                             :null => false
     t.string   "provider"
     t.string   "uid"
+    t.string   "access_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
