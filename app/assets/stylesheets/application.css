@@ -11,3 +11,11 @@
  *= require_self
  *= require_tree .
  */
+
+.spaced_table td {
+	padding:10px;
+}
+
+.links_header td{
+	font-size:20px;
+}

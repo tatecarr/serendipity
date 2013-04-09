@@ -1,12 +1,203 @@
-<h1>Home controller index</h1>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<style>
+  html, body {
+    margin:0;
+    padding:0;
+    height:100%;
+    width:100%;
+  }
+  #map-canvas {
+    margin:0;
+    padding:0;
+    height:80%;
+    width:75%;
+    float:left;
+  }
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+<script>
+  var map;
+  var clt_marker, mts_marker;
+  var clt = new google.maps.LatLng(35.2269, -80.8433);
+  var mts = new google.maps.LatLng(43.4856, -73.1182);
+	var tmpmarker;
+	var tmpcircle;
+
+  function initialize() {
+
+  	$('#clear-search').click(function() {
+  		if(typeof(tmpmarker) != 'undefined') tmpmarker.setMap(null);
+	  	if(typeof(tmpcircle) != 'undefined') tmpcircle.setMap(null);
+	  	$('#map-data').html('');
+  	});
+
+    var mapOptions = {
+      zoom: 6,
+      center: clt,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+        mapOptions);
+
+    // clt_marker = new google.maps.Marker({
+    // 	map:map,
+    // 	draggable:true,
+    // 	animation: google.maps.Animation.DROP,
+    // 	position: clt
+    // });
+
+    // mts_marker = new google.maps.Marker({
+    // 	map:map,
+    // 	draggable:true,
+    // 	animation: google.maps.Animation.DROP,
+    // 	position: mts
+    // });
+
+    google.maps.event.addListener(map, 'click', function(evt) {
+      // map.setZoom(8);
+      // map.setCenter(clt_marker.getPosition());
+      // alert(JSON.stringify(evt));
+      // alert(evt.latLng.lat());
+      if(typeof(tmpmarker) != 'undefined') tmpmarker.setMap(null);
+	  	if(typeof(tmpcircle) != 'undefined') tmpcircle.setMap(null);
+
+      tmpmarker = new google.maps.Marker({
+      	map:map,
+	    	draggable:true,
+	    	animation: google.maps.Animation.DROP,
+	    	position: evt.latLng
+      });
+
+      var search_radius = $('#search-radius').val()*1;
+      var circle_radius = ((search_radius*5280*12)*2.54)/100
+
+      tmpcircle = new google.maps.Circle({
+      	strokeColor: '#FF0000',
+      	strokeOpacity: 0.8,
+	      strokeWeight: 2,
+	      fillColor: '#FF0000',
+	      fillOpacity: 0.35,
+	      map: map,
+	      center: evt.latLng,
+	      radius: circle_radius //50000 // 50 kilometers
+      });
+
+      
+      var place_data = {
+      	'lat':evt.latLng.lat(),
+      	'lng':evt.latLng.lng(),
+      	'search_radius': search_radius
+      };
+
+
+
+      $.getJSON('gnp.json', place_data, function(data) {
+
+
+      	var div_html = ''
+
+      	$.each(data, function(index, value) {
+      		div_html += 'Name: ' + value['name'] + '<br/>';
+      		div_html += 'Type: ' + value['type_desc'] + '<br/><br/>';
+      	});
+
+      	$('#map-data').html(div_html);
+
+      // 	setTimeout(function() {
+
+	     //  	tmpmarker.setMap(null);
+			  	// tmpcircle.setMap(null);
+			  	// $('#map-data').html('');
+
+      // 	}, 2000);
+
+
+
+			  
+
+
+			});
+
+    });
+
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+
+<h1>Home</h1>
+
+
+<div id="map-canvas"></div>
+
+<div id='map-search-radius' style='float:left;width:20%;'>
+	<br/>
+	Search Radius in Miles:<br/>
+	<input type='text' id='search-radius' placeholder='search radius...' value='100'/> <input id='clear-search' type='button' value='Clear Search'/>
+	<br/><br/>
+</div>
+<div id='map-data' style='float:left;width:20%;'></div>
+
 
 <table>
 
-	<% @friends.each do |f| %>
-		<tr>
-			<td><%= link_to f.name, 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %><td>
-			<td><%= link_to image_tag('https://graph.facebook.com/'+f.raw_attributes['id']+'/picture'), 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %></td>
-		</tr>
+	<% @friends.each_with_index do |f,index| %>
+		<% if index < 10 %>
+			<tr>
+				<td><%= link_to 'Show THIS user page', 'http://localhost:3000/?uid='+f.raw_attributes['id'], :target => '_blank' %></td>
+				<td><%= link_to f.name, 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %><td>
+				<td><%= link_to image_tag('https://graph.facebook.com/'+f.raw_attributes['id']+'/picture'), 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %></td>
+
+			</tr>
+		<% else %>
+			<% break %>
+		<% end %>
+	<% end %>
+
+</table>
+
+<table>
+
+	<% @likes.each_with_index do |f,index| %>
+		
+			<tr>
+				<td><%= f.name %></td>
+				<td><%= f.category %></td>
+				<td><%= link_to f.link, f.link, :target => '_blank' %></td>
+			</tr>
+
+	<% end %>
+
+</table>
+
+<table>
+
+<!-- 	<tr>
+		<td>From</td>
+		<td>Type</td>
+		<td>Place</td>
+		<td>Lat</td>
+		<td>Long</td>
+		<td>Created</td>
+	</tr> -->
+
+	<% @locs.each_with_index do |f,index| %>
+		
+			<tr>
+				<td><%= f['from']['name'] %></td>
+				<td><%= f['type'] %></td>
+				<td><%= f['place']['name'] %></td>
+				<td><%= f['place']['location']['latitude'] %></td>
+				<td><%= f['place']['location']['longitude'] %></td>
+				<td><%= f['created_time'] %></td>
+			</tr>
+
 	<% end %>
 
 </table>

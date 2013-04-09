@@ -241,13 +241,15 @@ Devise.setup do |config|
 
   require 'omniauth-facebook'
 
-  # scope_string = 'email,user_birthday,read_stream'
-  #  :scope => scope_string,
+  scope_string = 'email,publish_actions,user_about_me,user_actions.music,user_actions.news,user_actions.video,user_activities,user_birthday,user_education_history,user_events,user_games_activity,user_groups,user_hometown,user_interests,user_likes,user_location,user_notes,user_photos,user_questions,user_relationship_details,user_relationships,user_religion_politics,user_status,user_subscriptions,user_videos,user_website,user_work_history,friends_about_me,friends_actions.music,friends_actions.news,friends_actions.video,friends_activities,friends_birthday,friends_education_history,friends_events,friends_games_activity,friends_groups,friends_hometown,friends_interests,friends_likes,friends_location,friends_notes,friends_photos,friends_questions,friends_relationship_details,friends_relationships,friends_religion_politics,friends_status,friends_subscriptions,friends_videos,friends_website,friends_work_history,export_stream,friends_online_presence,photo_upload,publish_checkins,publish_stream,read_friendlists,read_insights,read_requests,read_stream,share_item,status_update,user_online_presence,video_upload'
+
+  # :display => 'popup'
+
   if Rails.env.development?
     OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-    config.omniauth :facebook, '116727348513790', '07a38079493be0de33db7a8bccc036ae', :display => 'popup'
+    config.omniauth :facebook, '116727348513790', '07a38079493be0de33db7a8bccc036ae', :scope => scope_string
   else
-    config.omniauth :facebook, '477591402289002', '28741d492123d461fb81c1c750c06c76', :display => 'popup'
+    config.omniauth :facebook, '477591402289002', '28741d492123d461fb81c1c750c06c76', :scope => scope_string
   end
 
 

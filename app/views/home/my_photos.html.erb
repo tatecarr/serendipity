@@ -1,0 +1,16 @@
+<h1>My Photos!</h1>
+<h3><%= link_to 'Previous', url_for(:page => @pictures.previous_page_params) %> | <%= link_to 'Next', url_for(:page => @pictures.next_page_params) %></h3>
+
+<table>
+	<tr>
+		<% @pictures.each_with_index do |pic,index| %>
+
+			<% if index != 0 && index%5==0 && index+1 != @pictures.length %></tr><tr><% end %>
+			<td><%= image_tag pic['picture'] %></td>
+
+		<% end %>
+	</tr>
+</table>
+
+<%= link_to 'Previous', url_for(:page => @pictures.previous_page_params) %> | 
+<%= link_to 'Next', url_for(:page => @pictures.next_page_params) %>

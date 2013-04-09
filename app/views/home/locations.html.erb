@@ -1,0 +1,28 @@
+<table>
+
+<!-- 	<tr>
+		<td>From</td>
+		<td>Type</td>
+		<td>Place</td>
+		<td>Lat</td>
+		<td>Long</td>
+		<td>Created</td>
+	</tr> -->
+
+	<% @locs.each_with_index do |f,index| %>
+		
+			<tr>
+				<td><%= f['from']['name'] %></td>
+				<td><%= f['type'] %></td>
+				<td><%= f['place']['name'] %></td>
+				<td><%= f['place']['location']['latitude'] %></td>
+				<td><%= f['place']['location']['longitude'] %></td>
+				<td><%= f['created_time'] %></td>
+			</tr>
+
+	<% end %>
+
+</table>
+
+<%= link_to 'Previous', url_for(:page => @locs.previous_page_params) %> | 
+<%= link_to 'Next', url_for(:page => @locs.next_page_params) %>

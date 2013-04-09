@@ -44,3 +44,4 @@ gem 'omniauth-facebook'
 gem 'hirb'
 
 gem 'fb_graph'
+gem 'koala'

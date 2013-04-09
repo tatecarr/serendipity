@@ -1,5 +1,9 @@
 Serendipity::Application.routes.draw do
   
+  resources :places
+  match 'gnp' => 'places#get_nearby_places'
+
+
   resources :tmp_lat_longs
 
 
@@ -60,6 +64,10 @@ Serendipity::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
   match 'home/user_mgmt' => 'home#user_mgmt'
+  match 'home/my_photos' => 'home#my_photos'
+  match 'home/my_feed' => 'home#my_feed'
+  match 'home/locations' => 'home#locations'
+  match 'home/my_friends' => 'home#my_friends'
 
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }

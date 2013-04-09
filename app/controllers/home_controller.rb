@@ -4,37 +4,85 @@ class HomeController < ApplicationController
 	def index
 
 
-		the_id = params['uid'] || current_user.uid
 
-		# user = FbGraph::User.me(current_user.access_token)
+		@friends = []
+		@likes = []
+		@locs = []
 
-		user = FbGraph::User.fetch(the_id)
 
-		puts 'User-----', user.inspect, '-----User'
-
-		@picture_url = user.picture
-
-puts user.inspect
+		@graph = Koala::Facebook::API.new(current_user.access_token)
+		@picture_url = @graph.get_picture(current_user.uid)
 
 
 
-		user = FbGraph::User.fetch(the_id, :access_token => current_user.access_token)
-
-		@friends = user.friends
-		puts 'Friend-----', @friends.length, '-----Friend'
-
-		# ff_id = @friends.first.raw_attributes['id']
-		# puts 'ff_id',ff_id,''
-		# ff = FbGraph::User.fetch(ff_id, :access_token => current_user.access_token)
-
-		# fffriends = ff.friends
-
-		# puts 'First friend-----', ff.inspect, '-----First friend' #, fffriends.length, '-----ff length'
+		profile = @graph.get_object('me')
 
 
 		respond_to do |format|
 			format.html # index.html.erb
 		end
+	end
+
+	def my_friends
+
+		@graph = Koala::Facebook::API.new(current_user.access_token)
+		@picture_url = @graph.get_picture(current_user.uid)
+
+		@friends = @graph.get_connections('me', 'friends')
+
+		puts @friends[0].inspect
+
+		respond_to do |format|
+			format.html # index.html.erb
+		end
+	end
+
+	def my_photos
+
+		@graph = Koala::Facebook::API.new(current_user.access_token)
+		@picture_url = @graph.get_picture(current_user.uid)
+
+
+		@pictures = params[:page] ? @graph.get_page(params[:page]) : @graph.get_connections('me', 'photos')
+
+
+		# puts 'Pictures-----',@pictures.inspect,'-----Pictures'
+
+
+
+		respond_to do |format|
+			format.html
+		end
+
+	end
+
+	def my_feed
+
+		@graph = Koala::Facebook::API.new(current_user.access_token)
+		@picture_url = @graph.get_picture(current_user.uid)
+
+
+		@feed = params[:page] ? @graph.get_page(params[:page]) : @graph.get_connections('me', 'feed')
+
+
+		respond_to do |format|
+			format.html
+		end
+
+	end
+
+
+	def locations
+
+		@graph = Koala::Facebook::API.new(current_user.access_token)
+		@picture_url = @graph.get_picture(current_user.uid)
+
+		@locs = params[:page] ? @graph.get_page(params[:page]) : @graph.get_connections('me', 'locations')
+
+		respond_to do |format|
+			format.html
+		end
+
 	end
 
 

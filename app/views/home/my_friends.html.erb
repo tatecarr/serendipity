@@ -1,0 +1,16 @@
+<h1>Friends</h1>
+<h3><%= link_to 'Previous', url_for(:page => @friends.previous_page_params) %> | <%= link_to 'Next', url_for(:page => @friends.next_page_params) %></h3>
+
+<table>
+	<tr>
+		<% @friends.each_with_index do |pic,index| %>
+
+			<% if index != 0 && index%15==0 && index+1 != @friends.length %></tr><tr><% end %>
+			<td><%= link_to image_tag('https://graph.facebook.com/'+pic['id']+'/picture'), 'https://facebook.com/'+pic['id'], :target => '_blank' %></td>
+
+		<% end %>
+	</tr>
+</table>
+
+<%= link_to 'Previous', url_for(:page => @friends.previous_page_params) %> | 
+<%= link_to 'Next', url_for(:page => @friends.next_page_params) %>

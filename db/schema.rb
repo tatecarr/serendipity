@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327160716) do
+ActiveRecord::Schema.define(:version => 20130409160008) do
+
+  create_table "places", :force => true do |t|
+    t.decimal  "lat",        :precision => 12, :scale => 4
+    t.decimal  "long",       :precision => 12, :scale => 4
+    t.string   "name"
+    t.string   "type_desc"
+    t.string   "tags"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
 
   create_table "tmp_lat_longs", :force => true do |t|
     t.decimal  "lat",        :precision => 12, :scale => 4

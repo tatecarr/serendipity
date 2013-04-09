@@ -1,0 +1,29 @@
+<h1>My Feed</h1>
+<h3><%= link_to 'Previous', url_for(:page => @feed.previous_page_params) %> | <%= link_to 'Next', url_for(:page => @feed.next_page_params) %></h3>
+
+<table>
+	<tr>
+		<td>From</td>
+		<td>Subject/Story</td>
+	</tr>
+	<% @feed.each_with_index do |feed_elem,index| %>
+		<tr>
+
+			<td><%= feed_elem['from']['name'] %></td>
+			<td><%= feed_elem['type'] %></td>
+
+			<% case feed_elem['type'] %>
+			<% when 'status' %>
+				<td><%= feed_elem['story'] ? feed_elem['story'] : feed_elem['message'] %></td>
+			<% when 'photo' %>
+				<td><%= image_tag feed_elem['picture'] %><br/><%= feed_elem['description'] %></td>
+			<% else %>
+				<td><%= feed_elem['story'] ? feed_elem['story'] : feed_elem['message'] %></td>
+			<% end %>
+
+		</tr>
+	<% end %>
+</table>
+
+<%= link_to 'Previous', url_for(:page => @feed.previous_page_params) %> | 
+<%= link_to 'Next', url_for(:page => @feed.next_page_params) %>
