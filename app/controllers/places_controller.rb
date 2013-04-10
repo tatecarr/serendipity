@@ -4,8 +4,7 @@ class PlacesController < ApplicationController
   def index
 
     @graph = Koala::Facebook::API.new(current_user.access_token)
-    @picture_url = @graph.get_picture(current_user.uid)
-    
+
     @places = Place.all
 
     respond_to do |format|

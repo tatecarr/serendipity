@@ -11,8 +11,7 @@ class HomeController < ApplicationController
 
 
 		@graph = Koala::Facebook::API.new(current_user.access_token)
-		@picture_url = @graph.get_picture(current_user.uid)
-
+		
 
 
 		profile = @graph.get_object('me')
@@ -26,8 +25,7 @@ class HomeController < ApplicationController
 	def my_friends
 
 		@graph = Koala::Facebook::API.new(current_user.access_token)
-		@picture_url = @graph.get_picture(current_user.uid)
-
+		
 		@friends = @graph.get_connections('me', 'friends')
 
 		puts @friends[0].inspect
@@ -40,8 +38,7 @@ class HomeController < ApplicationController
 	def my_photos
 
 		@graph = Koala::Facebook::API.new(current_user.access_token)
-		@picture_url = @graph.get_picture(current_user.uid)
-
+		
 
 		@pictures = params[:page] ? @graph.get_page(params[:page]) : @graph.get_connections('me', 'photos')
 
@@ -59,8 +56,7 @@ class HomeController < ApplicationController
 	def my_feed
 
 		@graph = Koala::Facebook::API.new(current_user.access_token)
-		@picture_url = @graph.get_picture(current_user.uid)
-
+		
 
 		@feed = params[:page] ? @graph.get_page(params[:page]) : @graph.get_connections('me', 'feed')
 
@@ -75,8 +71,7 @@ class HomeController < ApplicationController
 	def locations
 
 		@graph = Koala::Facebook::API.new(current_user.access_token)
-		@picture_url = @graph.get_picture(current_user.uid)
-
+		
 		@locs = params[:page] ? @graph.get_page(params[:page]) : @graph.get_connections('me', 'locations')
 
 		respond_to do |format|
