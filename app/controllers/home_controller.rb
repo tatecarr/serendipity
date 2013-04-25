@@ -16,6 +16,10 @@ class HomeController < ApplicationController
 
 		profile = @graph.get_object('me')
 
+		likes = @graph.get_connections('me', 'friends')
+
+		puts '-----Likes', likes, '-----Likes'
+
 
 		respond_to do |format|
 			format.html # index.html.erb

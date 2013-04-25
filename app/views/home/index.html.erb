@@ -35,6 +35,22 @@
 	  	$('#map-data').html('');
   	});
 
+  	$('#places-search').click(function() {
+
+  		var meters_radius = $('#places-radius').val()*1;
+  		var places_keyword = $('#places-keyword').val();
+
+  		try
+  		{
+	  		get_nearby_places(tmpmarker.position.lat(), tmpmarker.position.lng(), 5000, places_keyword);
+  		}
+  		catch(err)
+  		{
+  			alert('Please click a location on the map to perform a POI search');
+  		}
+
+  	});
+
     var mapOptions = {
       zoom: 6,
       center: clt,
@@ -135,6 +151,17 @@
 
 
 <div id="map-canvas"></div>
+
+
+<div id='map-search-radius' style='float:left;width:20%;'>
+	<br/>
+	Search for POI:<br/>
+	<input type='text' id='places-radius' placeholder='Radius in Meters...' value='5000'/><br/>
+	<input type='text' id='places-keyword' placeholder='search keyword...' value=''/><br/>
+	<input id='places-search' type='button' value='POI Search'/>
+	<br/><br/>
+</div>
+
 
 <div id='map-search-radius' style='float:left;width:20%;'>
 	<br/>

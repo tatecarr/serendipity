@@ -45,3 +45,6 @@ gem 'hirb'
 
 gem 'fb_graph'
 gem 'koala'
+
+# gem 'google_places'
+gem 'httparty'

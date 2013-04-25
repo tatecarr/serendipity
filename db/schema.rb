@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130409160008) do
+ActiveRecord::Schema.define(:version => 20130424220814) do
+
+  create_table "people", :force => true do |t|
+    t.integer  "uid"
+    t.string   "name"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "fb_link"
+    t.string   "fb_username"
+    t.date     "birthday"
+    t.string   "gender"
+    t.string   "interested_in"
+    t.string   "political"
+    t.string   "email"
+    t.integer  "timezone"
+    t.string   "locale"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "places", :force => true do |t|
     t.decimal  "lat",        :precision => 12, :scale => 4

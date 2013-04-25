@@ -104,4 +104,35 @@ class PlacesController < ApplicationController
     end
   end
 
+
+  def get_google_nearby_places
+
+    google_api_key = 'AIzaSyDAv-dHqblICmyP7hX8PHzvfmKyKsa1r2U'
+
+    keyword = (params[:keyword]).blank? ? '' : '&keyword='+params[:keyword]
+
+    url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+    url_params = 'key='+google_api_key+'&location='+params[:location]+'&radius='+params[:radius]+'&sensor='+params[:sensor]+keyword
+    # params = 'key=AIzaSyDAv-dHqblICmyP7hX8PHzvfmKyKsa1r2U&location=35.2269%2C-80.8433&radius=1000&sensor=false&keyword=fast'
+
+
+    resp = HTTParty.get(url+url_params)
+    return_json = nil
+
+    if resp.code == 200
+
+      # parse and then render to json because was including newlines and whitespace from google
+      return_json = JSON.parse(resp.body)
+
+    else
+      raise 'Error getting places from google web service'
+    end
+
+    respond_to do |format|
+      # format.html # index.html.erb
+      format.json { render json: return_json }
+    end
+
+  end
+
 end
