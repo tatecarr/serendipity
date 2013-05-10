@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid, :access_token
   # attr_accessible :title, :body
 
+  def person
+  	Person.find_by_uid(self.uid)
+  end
+
 
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
 

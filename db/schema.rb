@@ -11,10 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130424220814) do
+ActiveRecord::Schema.define(:version => 20130510180319) do
+
+  create_table "entity_types", :force => true do |t|
+    t.string   "entity_type_desc"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "people", :force => true do |t|
-    t.integer  "uid"
     t.string   "name"
     t.string   "first_name"
     t.string   "last_name"
@@ -27,8 +32,36 @@ ActiveRecord::Schema.define(:version => 20130424220814) do
     t.string   "email"
     t.integer  "timezone"
     t.string   "locale"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.boolean  "person_populated"
+    t.string   "uid"
+  end
+
+  create_table "person_educations", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "name"
+    t.string   "type_desc"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "education_id"
+  end
+
+  create_table "person_friends", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "friend_name"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "friend_uid"
+  end
+
+  create_table "person_likes", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "category"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "like_id"
   end
 
   create_table "places", :force => true do |t|
@@ -39,6 +72,29 @@ ActiveRecord::Schema.define(:version => 20130424220814) do
     t.string   "tags"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "relationship_types", :force => true do |t|
+    t.string   "relationship_desc"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "relationships", :force => true do |t|
+    t.integer  "source_id"
+    t.integer  "source_type"
+    t.integer  "target_id"
+    t.integer  "target_type"
+    t.integer  "relationship_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "things", :force => true do |t|
+    t.string   "name"
+    t.string   "type_desc"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "tmp_lat_longs", :force => true do |t|
@@ -66,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20130424220814) do
     t.string   "provider"
     t.string   "uid"
     t.string   "access_token"
+    t.boolean  "person_populated"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

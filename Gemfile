@@ -48,3 +48,5 @@ gem 'koala'
 
 # gem 'google_places'
 gem 'httparty'
+
+gem 'sparql-client'

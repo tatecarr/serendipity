@@ -1,5 +1,14 @@
 Serendipity::Application.routes.draw do
   
+  resources :things
+
+
+  resources :relationship_types
+
+
+  resources :entity_types
+
+
   resources :places
   match 'gnp' => 'places#get_nearby_places'
   match 'google_gnp' => 'places#get_google_nearby_places'
@@ -68,6 +77,8 @@ Serendipity::Application.routes.draw do
   match 'home/my_feed' => 'home#my_feed'
   match 'home/locations' => 'home#locations'
   match 'home/my_friends' => 'home#my_friends'
+
+  match 'home/delete_all_my_stuff' => 'home#delete_all_my_stuff'
 
 
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }

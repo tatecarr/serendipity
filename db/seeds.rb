@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+EntityType.create([{entity_type_desc: 'Person'}, {entity_type_desc: 'Place'}, {entity_type_desc: 'Thing'}, {entity_type_desc: 'Event'}])
+
+
