@@ -1,0 +1,21 @@
+<%= form_for(@relationship_type) do |f| %>
+  <% if @relationship_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@relationship_type.errors.count, "error") %> prohibited this relationship_type from being saved:</h2>
+
+      <ul>
+      <% @relationship_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :relationship_desc %><br />
+    <%= f.text_field :relationship_desc %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
