@@ -6,7 +6,7 @@ class EntityType < ActiveRecord::Base
 
   	entity_type = EntityType.find_by_entity_type_desc(type)
 
-  	if entity_type.nil?
+  	if entity_type.blank?
   		entity_type = EntityType.create(entity_type_desc:type)
   	end
 

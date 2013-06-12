@@ -1,0 +1,49 @@
+<h1>Data Linked to Me</h1>
+
+<% unless @hometown.blank? %>
+	<h2>My hometown: <%= @hometown['name'] %></h2>
+	
+	<p>
+		<%= @hometown_notable_people['total_number'] %> notable <%= @hometown_notable_people['total_number'] == 1 ? 'person was' : 'people were' %> born in your hometown...
+		<% if @hometown_notable_people['total_number'] > 10 %>
+			<br/>(Showing 10 randomly selected people)
+		<% end %>
+	</p>
+
+	<% @hometown_notable_people['notable_people'].each do |person| %>
+
+		<p>
+			<%= person.name %>
+			<% unless person.birthday.blank? %>
+				<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
+			<% end %>
+		</p>
+
+	<% end %>
+	
+<% end %>
+
+
+<% unless @current_location.blank? %>
+	<h2>My current location: <%= @current_location['name'] %></h2>
+	
+	<p>
+		<%= @current_location_notable_people['total_number'] %> notable <%= @current_location_notable_people['total_number'] == 1 ? 'person was' : 'people were' %> born in your current location...
+		<% if @current_location_notable_people['total_number'] > 10 %>
+			<br/>(Showing 10 randomly selected people)
+		<% end %>
+	</p>
+
+	<% @current_location_notable_people['notable_people'].each do |person| %>
+
+		<p>
+			<%= person.name %>
+			<% unless person.birthday.blank? %>
+				<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
+			<% end %>
+		</p>
+
+	<% end %>
+	
+<% end %>
+

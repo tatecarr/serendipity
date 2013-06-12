@@ -5,7 +5,7 @@ class Thing < ActiveRecord::Base
 
   	thing = Thing.find_by_name(name)
 
-  	if thing.nil?
+  	if thing.blank?
   		thing = Thing.create(name:name, type_desc:type_desc)
   	end
 

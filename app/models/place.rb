@@ -16,7 +16,7 @@ class Place < ActiveRecord::Base
 
   	place = Place.find_by_name(name)
 
-  	if place.nil?
+  	if place.blank?
   		place = Place.create(lat:lat, long:long, name:name, type_desc:type_desc)
   	end
 
@@ -25,9 +25,9 @@ class Place < ActiveRecord::Base
   end
 
 
-  def self.get_fb_info_by_page_id(current_user, fb_id)
+  def self.get_fb_info_by_page_id(user_access_token, fb_id)
 
-  	graph = Koala::Facebook::API.new(current_user.access_token)
+  	graph = Koala::Facebook::API.new(user_access_token)
 
   	loc = graph.get_object(fb_id)
 

@@ -77,6 +77,7 @@ Serendipity::Application.routes.draw do
   match 'home/my_feed' => 'home#my_feed'
   match 'home/locations' => 'home#locations'
   match 'home/my_friends' => 'home#my_friends'
+  match 'home/linked_data' => 'home#linked_data'
 
   match 'home/delete_all_my_stuff' => 'home#delete_all_my_stuff'
 

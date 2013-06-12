@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130510180319) do
+ActiveRecord::Schema.define(:version => 20130611233212) do
 
   create_table "entity_types", :force => true do |t|
     t.string   "entity_type_desc"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130510180319) do
     t.datetime "updated_at",       :null => false
     t.boolean  "person_populated"
     t.string   "uid"
+    t.string   "resource_id"
   end
 
   create_table "person_educations", :force => true do |t|
@@ -127,5 +128,13 @@ ActiveRecord::Schema.define(:version => 20130510180319) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "ymddates", :force => true do |t|
+    t.integer  "year"
+    t.integer  "month"
+    t.integer  "day"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
 end

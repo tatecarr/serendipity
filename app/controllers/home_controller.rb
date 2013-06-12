@@ -22,20 +22,20 @@ class HomeController < ApplicationController
 
 		sparql = SPARQL::Client.new("http://dbpedia.org/sparql")
 
-		# query = 'PREFIX prop: <http://dbpedia.org/property/>
+		query = 'PREFIX prop: <http://dbpedia.org/property/>
 
-		# 					select ?place ?name ?pop_total ?lat ?long
-		# 					where
-		# 					{
+							select ?place ?name ?pop_total ?lat ?long
+							where
+							{
 							    
-		# 					    # ?place foaf:name "'++'" ;
-		# 					    ?place rdf:type yago:TownsInVermont ;
-		# 					    		foaf:name "Middletown Springs, Vermont"@en ;
-		# 					        dbpedia-owl:populationTotal ?pop_total ;
-		# 					        geo:lat ?lat ;
-		# 					        geo:long ?long .
+							    ?place foaf:name ?name ;
+							    rdf:type yago:TownsInVermont ;
+							    		foaf:name "Middletown Springs, Vermont"@en ;
+							        dbpedia-owl:populationTotal ?pop_total ;
+							        geo:lat ?lat ;
+							        geo:long ?long .
 
-		# 					}'
+							}'
 
     # rdf:type dbpedia-owl:Place ;
     # FILTER regex(?name, "Middletown Springs")
@@ -100,6 +100,34 @@ class HomeController < ApplicationController
 	end
 
 
+	def linked_data
+
+		my_person = current_user.person
+
+		@hometown_relationship = Relationship.where(:source_id => my_person.id, :source_type => EntityType.get_entity_type_id('Person'),
+			:target_type => EntityType.get_entity_type_id('Place'), :relationship_type => RelationshipType.get_relationship_type_id('Hometown'))
+
+		unless @hometown_relationship.blank?
+			@hometown = Place.find(@hometown_relationship.first['target_id'].to_i)
+
+			@hometown_notable_people = get_notable_people(@hometown)
+		end
+
+
+		@current_location_relationship = Relationship.where(:source_id => my_person.id, :source_type => EntityType.get_entity_type_id('Person'),
+			:target_type => EntityType.get_entity_type_id('Place'), :relationship_type => RelationshipType.get_relationship_type_id('CurrentLocation'))
+
+		unless @current_location_relationship.blank?
+			@current_location = Place.find(@current_location_relationship.first['target_id'].to_i)
+
+			@current_location_notable_people = get_notable_people(@current_location)
+		end
+
+
+	end
+
+
+
 	def locations
 
 		@graph = Koala::Facebook::API.new(current_user.access_token)
@@ -156,6 +184,35 @@ class HomeController < ApplicationController
 
 	end
 
+private
 
+	def get_notable_people(location)
+
+		location_rel = Relationship.where(:target_id => location['id'], :target_type => EntityType.get_entity_type_id('Place'),
+				:relationship_type => RelationshipType.get_relationship_type_id('Birthplace'))
+
+		unless location_rel.blank?
+
+			person_id_array = []
+
+			if location_rel.size > 10
+
+				for i in 1..10
+					person_id_array.push(location_rel[(location_rel.size*rand).to_i]['source_id'])
+				end
+
+			else
+				location_rel.each do |rel|
+					person_id_array.push(rel['source_id'])
+				end
+			end
+
+			notable_people = Person.find(person_id_array)
+
+		end
+
+		return { 'notable_people' => notable_people, 'total_number' => location_rel.size }
+		
+	end
 
 end
