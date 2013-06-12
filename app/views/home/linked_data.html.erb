@@ -11,16 +11,27 @@
 	</p>
 
 	<% unless @hometown_notable_people['notable_people'].blank? %>
-		<% @hometown_notable_people['notable_people'].each do |person| %>
 
-			<p>
-				<%= person.name %>
-				<% unless person.birthday.blank? %>
-					<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
-				<% end %>
-			</p>
+		<table class='linked_data_table'>
+			<tr>
+				<td>Name</td>
+				<td>DOB</td>
+			</tr>
 
-		<% end %>
+			<% @hometown_notable_people['notable_people'].each do |person| %>
+
+				<tr>
+					<td><%= person.name %></td>
+					<td>
+						<% unless person.birthday.blank? %>
+							<%= person.birthday.strftime('%B %d, %Y') %>
+						<% end %>
+					</td>
+				</tr>
+
+			<% end %>
+
+		</table>
 	<% end %>
 	
 <% end %>
@@ -37,16 +48,27 @@
 	</p>
 
 	<% unless @current_location_notable_people['notable_people'].blank? %>
-		<% @current_location_notable_people['notable_people'].each do |person| %>
 
-			<p>
-				<%= person.name %>
-				<% unless person.birthday.blank? %>
-					<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
-				<% end %>
-			</p>
+		<table class='linked_data_table'>
+			<tr>
+				<td>Name</td>
+				<td>DOB</td>
+			</tr>
 
-		<% end %>
+			<% @current_location_notable_people['notable_people'].each do |person| %>
+
+				<tr>
+					<td><%= person.name %></td>
+					<td>
+						<% unless person.birthday.blank? %>
+							<%= person.birthday.strftime('%B %d, %Y') %>
+						<% end %>
+					</td>
+				</tr>
+
+			<% end %>
+
+		</table>
 	<% end %>
 	
 <% end %>

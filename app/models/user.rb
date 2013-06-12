@@ -328,7 +328,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 	def self.populate_notable_people(location_record)
 
 		sparql = SPARQL::Client.new("http://dbpedia.org/sparql")
-		
+
 		location_name = location_record['name']
 
 		puts 'Start the DBpedia searching-----'
@@ -347,6 +347,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
     	if us_states_array.include?(hometown_array[1].strip)
     		# use just the name as the search term
+    		puts '---it is a US state'
 
     		underscored_name = location_name.gsub(' ','_')
 
@@ -370,6 +371,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 				  }
 				}'
 
+				puts query
 				puts '-----pre DBPedia result'
 
 				result = sparql.query(query)
@@ -400,6 +402,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 					  }
 					}'
 
+					puts query
 					puts '-----pre DBPedia result'
 
 					result = sparql.query(query)
@@ -440,6 +443,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 				  }
 				}'
 
+				puts query
 				puts '-----pre DBPedia result'
 
 				result = sparql.query(query)

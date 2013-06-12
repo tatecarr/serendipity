@@ -19,3 +19,7 @@
 .links_header td{
 	font-size:20px;
 }
+
+.linked_data_table td {
+	padding:4px;
+}
