@@ -21,7 +21,7 @@
 			<% @hometown_notable_people['notable_people'].each do |person| %>
 
 				<tr>
-					<td><%= person.name %></td>
+					<td><%= link_to person.name, person.resource_id, {'target'=>'_blank'} %></td>
 					<td>
 						<% unless person.birthday.blank? %>
 							<%= person.birthday.strftime('%B %d, %Y') %>
@@ -58,7 +58,7 @@
 			<% @current_location_notable_people['notable_people'].each do |person| %>
 
 				<tr>
-					<td><%= person.name %></td>
+					<td><%= link_to person.name, person.resource_id, {'target'=>'_blank'} %></td>
 					<td>
 						<% unless person.birthday.blank? %>
 							<%= person.birthday.strftime('%B %d, %Y') %>
