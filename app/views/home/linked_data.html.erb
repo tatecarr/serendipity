@@ -10,15 +10,17 @@
 		<% end %>
 	</p>
 
-	<% @hometown_notable_people['notable_people'].each do |person| %>
+	<% unless @hometown_notable_people['notable_people'].blank? %>
+		<% @hometown_notable_people['notable_people'].each do |person| %>
 
-		<p>
-			<%= person.name %>
-			<% unless person.birthday.blank? %>
-				<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
-			<% end %>
-		</p>
+			<p>
+				<%= person.name %>
+				<% unless person.birthday.blank? %>
+					<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
+				<% end %>
+			</p>
 
+		<% end %>
 	<% end %>
 	
 <% end %>
@@ -34,15 +36,17 @@
 		<% end %>
 	</p>
 
-	<% @current_location_notable_people['notable_people'].each do |person| %>
+	<% unless @current_location_notable_people['notable_people'].blank? %>
+		<% @current_location_notable_people['notable_people'].each do |person| %>
 
-		<p>
-			<%= person.name %>
-			<% unless person.birthday.blank? %>
-				<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
-			<% end %>
-		</p>
+			<p>
+				<%= person.name %>
+				<% unless person.birthday.blank? %>
+					<%= ' DOB: ' + person.birthday.strftime('%B %d, %Y') %>
+				<% end %>
+			</p>
 
+		<% end %>
 	<% end %>
 	
 <% end %>
