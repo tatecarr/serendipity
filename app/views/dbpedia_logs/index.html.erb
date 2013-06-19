@@ -1,0 +1,33 @@
+<h1>Listing dbpedia_logs</h1>
+
+<table>
+  <tr>
+    <th>Source</th>
+    <th>Source type</th>
+    <th>Info type</th>
+    <th>Status</th>
+    <th>Added relationships</th>
+    <th>Log message</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @dbpedia_logs.each do |dbpedia_log| %>
+  <tr>
+    <td><%= dbpedia_log.source_id %></td>
+    <td><%= dbpedia_log.source_type %></td>
+    <td><%= dbpedia_log.info_type_id %></td>
+    <td><%= dbpedia_log.status %></td>
+    <td><%= dbpedia_log.added_relationships %></td>
+    <td><%= dbpedia_log.log_message %></td>
+    <td><%= link_to 'Show', dbpedia_log %></td>
+    <td><%= link_to 'Edit', edit_dbpedia_log_path(dbpedia_log) %></td>
+    <td><%= link_to 'Destroy', dbpedia_log, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Dbpedia log', new_dbpedia_log_path %>

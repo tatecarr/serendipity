@@ -1,0 +1,25 @@
+<%= form_for(@dbpedia_info) do |f| %>
+  <% if @dbpedia_info.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@dbpedia_info.errors.count, "error") %> prohibited this dbpedia_info from being saved:</h2>
+
+      <ul>
+      <% @dbpedia_info.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :info_type_desc %><br />
+    <%= f.text_field :info_type_desc %>
+  </div>
+  <div class="field">
+    <%= f.label :entity_type_id %><br />
+    <%= f.select(:entity_type_id, options_from_collection_for_select(EntityType.all, :id, :entity_type_desc, @dbpedia_info.entity_type_id)) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

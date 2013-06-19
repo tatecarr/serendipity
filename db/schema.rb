@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130611233212) do
+ActiveRecord::Schema.define(:version => 20130619193556) do
+
+  create_table "dbpedia_infos", :force => true do |t|
+    t.string   "info_type_desc"
+    t.integer  "entity_type_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "dbpedia_logs", :force => true do |t|
+    t.integer  "source_id"
+    t.integer  "source_type"
+    t.integer  "info_type_id"
+    t.string   "status"
+    t.integer  "added_relationships"
+    t.string   "log_message"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
 
   create_table "entity_types", :force => true do |t|
     t.string   "entity_type_desc"
@@ -73,6 +91,15 @@ ActiveRecord::Schema.define(:version => 20130611233212) do
     t.string   "tags"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "populated_infos", :force => true do |t|
+    t.integer  "source_id"
+    t.integer  "source_type"
+    t.integer  "dbpedia_info_id"
+    t.boolean  "is_populated"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "relationship_types", :force => true do |t|

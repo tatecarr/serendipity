@@ -1,5 +1,11 @@
 Serendipity::Application.routes.draw do
   
+  resources :dbpedia_logs
+
+
+  resources :dbpedia_infos
+
+
   resources :things
 
 

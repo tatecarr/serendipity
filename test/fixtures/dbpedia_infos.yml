@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  info_type_desc: MyString
+  entity_type_id: 1
+
+two:
+  info_type_desc: MyString
+  entity_type_id: 1

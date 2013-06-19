@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  source_id: 1
+  source_type: 1
+  info_type_id: 1
+  status: MyString
+  added_relationships: 1
+  log_message: MyString
+
+two:
+  source_id: 1
+  source_type: 1
+  info_type_id: 1
+  status: MyString
+  added_relationships: 1
+  log_message: MyString

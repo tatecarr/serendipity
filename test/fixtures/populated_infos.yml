@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  source_id: 1
+  source_type: 1
+  dbpedia_info_id: 1
+  is_populated: false
+
+two:
+  source_id: 1
+  source_type: 1
+  dbpedia_info_id: 1
+  is_populated: false

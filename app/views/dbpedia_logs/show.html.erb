@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Source:</b>
+  <%= @dbpedia_log.source_id %>
+</p>
+
+<p>
+  <b>Source type:</b>
+  <%= @dbpedia_log.source_type %>
+</p>
+
+<p>
+  <b>Info type:</b>
+  <%= @dbpedia_log.info_type_id %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @dbpedia_log.status %>
+</p>
+
+<p>
+  <b>Added relationships:</b>
+  <%= @dbpedia_log.added_relationships %>
+</p>
+
+<p>
+  <b>Log message:</b>
+  <%= @dbpedia_log.log_message %>
+</p>
+
+
+<%= link_to 'Edit', edit_dbpedia_log_path(@dbpedia_log) %> |
+<%= link_to 'Back', dbpedia_logs_path %>

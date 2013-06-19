@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Info type desc:</b>
+  <%= @dbpedia_info.info_type_desc %>
+</p>
+
+<p>
+  <b>Entity type:</b>
+  <%= @dbpedia_info.entity_type_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_dbpedia_info_path(@dbpedia_info) %> |
+<%= link_to 'Back', dbpedia_infos_path %>
