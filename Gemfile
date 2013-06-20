@@ -50,3 +50,6 @@ gem 'koala'
 gem 'httparty'
 
 gem 'sparql-client'
+
+gem 'best_in_place'
+

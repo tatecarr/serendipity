@@ -1,5 +1,6 @@
 class DbpediaInfo < ActiveRecord::Base
 	belongs_to :entity_type
+	belongs_to :relationship_category
   attr_accessible :entity_type_id, :info_type_desc
 
   def self.get_or_create(type_desc)

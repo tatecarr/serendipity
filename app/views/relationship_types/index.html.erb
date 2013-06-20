@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+    <th>Relationship Category</th>
     <th>Relationship desc</th>
     <th></th>
     <th></th>
@@ -10,6 +11,7 @@
 
 <% @relationship_types.each do |relationship_type| %>
   <tr>
+    <td><%= best_in_place relationship_type, :relation_category_id, type: :select, collection: RelationshipCategory.all.map { |x| [x.id, x.description] } %></td>
     <td><%= relationship_type.relationship_desc %></td>
     <td><%= link_to 'Show', relationship_type %></td>
     <td><%= link_to 'Edit', edit_relationship_type_path(relationship_type) %></td>

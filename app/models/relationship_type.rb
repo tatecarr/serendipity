@@ -1,5 +1,5 @@
 class RelationshipType < ActiveRecord::Base
-  attr_accessible :relationship_desc
+  attr_accessible :relationship_desc, :relation_category_id
 
   # return the entity type ID for the given type -- record may be created first if does not exist
   def self.get_relationship_type_id(type)

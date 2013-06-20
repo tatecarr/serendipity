@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619193556) do
+ActiveRecord::Schema.define(:version => 20130620183302) do
 
   create_table "dbpedia_infos", :force => true do |t|
     t.string   "info_type_desc"
@@ -102,10 +102,17 @@ ActiveRecord::Schema.define(:version => 20130619193556) do
     t.datetime "updated_at",      :null => false
   end
 
+  create_table "relationship_categories", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "relationship_types", :force => true do |t|
     t.string   "relationship_desc"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.integer  "relation_category_id"
   end
 
   create_table "relationships", :force => true do |t|

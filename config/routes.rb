@@ -1,5 +1,8 @@
 Serendipity::Application.routes.draw do
   
+  resources :relationship_categories
+
+
   resources :dbpedia_logs
 
 

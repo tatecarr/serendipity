@@ -11,8 +11,8 @@
 
 <% @dbpedia_infos.each do |dbpedia_info| %>
   <tr>
-    <td><%= dbpedia_info.info_type_desc %></td>
-    <td><%= dbpedia_info.entity_type_id %></td>
+    <td><%= best_in_place dbpedia_info, :info_type_desc %></td>
+    <td><%= best_in_place dbpedia_info, :entity_type_id, type: :select, collection: EntityType.all.map { |x| [x.id, x.entity_type_desc] } %></td>
     <td><%= link_to 'Show', dbpedia_info %></td>
     <td><%= link_to 'Edit', edit_dbpedia_info_path(dbpedia_info) %></td>
     <td><%= link_to 'Destroy', dbpedia_info, method: :delete, data: { confirm: 'Are you sure?' } %></td>
