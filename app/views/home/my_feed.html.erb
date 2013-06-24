@@ -1,10 +1,10 @@
 <h1>My Feed</h1>
-<h3><%= link_to 'Previous', url_for(:page => @feed.previous_page_params) %> | <%= link_to 'Next', url_for(:page => @feed.next_page_params) %></h3>
 
 <table>
 	<tr>
-		<td>From</td>
-		<td>Subject/Story</td>
+		<th>From</th>
+		<th>Subject/Story</th>
+		<th>Message</th>
 	</tr>
 	<% @feed.each_with_index do |feed_elem,index| %>
 		<tr>
@@ -25,5 +25,5 @@
 	<% end %>
 </table>
 
-<%= link_to 'Previous', url_for(:page => @feed.previous_page_params) %> | 
-<%= link_to 'Next', url_for(:page => @feed.next_page_params) %>
+
+<h3><%= link_to 'Previous', url_for(:page => @feed.previous_page_params) %> | <%= link_to 'Next', url_for(:page => @feed.next_page_params) %></h3>

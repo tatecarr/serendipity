@@ -1,7 +1,7 @@
-<h1>Data Linked to Me</h1>
+<h2>Encyclopedia Data Linked to Me</h2>
 
 <% unless @hometown.blank? %>
-	<h2>My hometown: <%= @hometown['name'] %></h2>
+	<h3>My hometown: <%= @hometown['name'] %></h3>
 	
 	<p>
 		<%= @hometown_notable_people['total_number'] %> notable <%= @hometown_notable_people['total_number'] == 1 ? 'person was' : 'people were' %> born in your hometown...
@@ -14,8 +14,8 @@
 
 		<table class='linked_data_table'>
 			<tr>
-				<td>Name</td>
-				<td>DOB</td>
+				<th>Name</th>
+				<th>DOB</th>
 			</tr>
 
 			<% @hometown_notable_people['notable_people'].each do |person| %>
@@ -38,7 +38,7 @@
 
 
 <% unless @current_location.blank? %>
-	<h2>My current location: <%= @current_location['name'] %></h2>
+	<h3>My current location: <%= @current_location['name'] %></h3>
 	
 	<p>
 		<%= @current_location_notable_people['total_number'] %> notable <%= @current_location_notable_people['total_number'] == 1 ? 'person was' : 'people were' %> born in your current location...
@@ -51,8 +51,8 @@
 
 		<table class='linked_data_table'>
 			<tr>
-				<td>Name</td>
-				<td>DOB</td>
+				<th>Name</th>
+				<th>DOB</th>
 			</tr>
 
 			<% @current_location_notable_people['notable_people'].each do |person| %>

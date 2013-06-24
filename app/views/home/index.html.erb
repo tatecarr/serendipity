@@ -11,13 +11,11 @@
   #map-canvas {
     margin:0;
     padding:0;
-    height:80%;
-    width:75%;
-    float:left;
+    height:600px;
+    width:100%;
   }
 </style>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
 <script>
   var map;
@@ -132,10 +130,6 @@
       // 	}, 2000);
 
 
-
-			  
-
-
 			});
 
     });
@@ -147,84 +141,45 @@
 </script>
 
 
-<h1>Home</h1>
+<div id='map-search-radius' class='row'>
+  <fieldset>
+    <legend>Search POI</legend>
 
-
-<div id="map-canvas"></div>
-
-
-<div id='map-search-radius' style='float:left;width:20%;'>
-	<br/>
-	Search for POI:<br/>
-	<input type='text' id='places-radius' placeholder='Radius in Meters...' value='5000'/><br/>
-	<input type='text' id='places-keyword' placeholder='search keyword...' value=''/><br/>
-	<input id='places-search' type='button' value='POI Search'/>
-	<br/><br/>
+    <div class='large-4 columns'>
+      <label>Radius in meters</label>
+      <input type='text' id='places-radius' placeholder='Radius in Meters...' value='5000'/>
+    </div>
+    <div class='large-4 columns'>
+      <label>Search keyword</label>
+      <input type='text' id='places-keyword' placeholder='enter a keyword...' value=''/>
+    </div>
+    <div class='large-4 columns'>
+      <label>&nbsp;</label>
+      <input id='places-search' type='button' class='button prefix' value='POI Search'/>
+    </div>
+  </fieldset>
 </div>
 
 
-<div id='map-search-radius' style='float:left;width:20%;'>
-	<br/>
-	Search Radius in Miles:<br/>
-	<input type='text' id='search-radius' placeholder='search radius...' value='100'/> <input id='clear-search' type='button' value='Clear Search'/>
-	<br/><br/>
+<div id='map-search-radius' class='row'>
+  <fieldset>
+    <legend>Locaions Search Radius in Miles</legend>
+
+    <div class='large-4 columns'>
+      <label>Search radius in miles</label>
+      <input type='text' id='search-radius' placeholder='search radius...' value='100'/>
+    </div>
+
+    <div class='large-4 columns'>
+      <label>&nbsp;</label>
+      <input id='clear-search' type='button' class='button prefix' value='Clear Search'/>
+    </div>
+
+  </fieldset>
 </div>
-<div id='map-data' style='float:left;width:20%;'></div>
 
+<div id='map_outer_container'>
+  <div id="map-canvas"></div>
+  <div id='map-data' class='location_results'></div>
+</div>
 
-<table>
-
-	<% @friends.each_with_index do |f,index| %>
-		<% if index < 10 %>
-			<tr>
-				<td><%= link_to 'Show THIS user page', 'http://localhost:3000/?uid='+f.raw_attributes['id'], :target => '_blank' %></td>
-				<td><%= link_to f.name, 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %><td>
-				<td><%= link_to image_tag('https://graph.facebook.com/'+f.raw_attributes['id']+'/picture'), 'https://facebook.com/'+f.raw_attributes['id'], :target => '_blank' %></td>
-
-			</tr>
-		<% else %>
-			<% break %>
-		<% end %>
-	<% end %>
-
-</table>
-
-<table>
-
-	<% @likes.each_with_index do |f,index| %>
-		
-			<tr>
-				<td><%= f.name %></td>
-				<td><%= f.category %></td>
-				<td><%= link_to f.link, f.link, :target => '_blank' %></td>
-			</tr>
-
-	<% end %>
-
-</table>
-
-<table>
-
-<!-- 	<tr>
-		<td>From</td>
-		<td>Type</td>
-		<td>Place</td>
-		<td>Lat</td>
-		<td>Long</td>
-		<td>Created</td>
-	</tr> -->
-
-	<% @locs.each_with_index do |f,index| %>
-		
-			<tr>
-				<td><%= f['from']['name'] %></td>
-				<td><%= f['type'] %></td>
-				<td><%= f['place']['name'] %></td>
-				<td><%= f['place']['location']['latitude'] %></td>
-				<td><%= f['place']['location']['longitude'] %></td>
-				<td><%= f['created_time'] %></td>
-			</tr>
-
-	<% end %>
-
-</table>

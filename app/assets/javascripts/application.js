@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require foundation
 //= require jquery.purr
 //= require best_in_place
 //= require_tree .
@@ -65,3 +66,5 @@ function drop_places_on_map(data)
 	// alert(JSON.stringify(data));
 }
 
+
+$(function(){ $(document).foundation(); });

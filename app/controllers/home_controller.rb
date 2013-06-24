@@ -4,12 +4,6 @@ class HomeController < ApplicationController
 	def index
 
 
-
-		@friends = []
-		@likes = []
-		@locs = []
-
-
 		@graph = Koala::Facebook::API.new(current_user.access_token)
 		
 
