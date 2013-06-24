@@ -93,18 +93,18 @@ class User < ActiveRecord::Base
 
 	    	logger.debug 'Person not blank and person_populated != 1'
 
-	    	existing_person.name = me['name'],
-        existing_person.first_name = me['first_name'],
-        existing_person.last_name = me['last_name'],
-        existing_person.fb_link = me['link'],
-        existing_person.fb_username = me['username'],
-        existing_person.birthday = format_date,
-        existing_person.gender = me['gender'],
-        existing_person.interested_in = interested_in_list,
-        existing_person.political = me['political'],
-        existing_person.email = me['email'],
-        existing_person.timezone = me['timezone'],
-        existing_person.locale = me['locale'],
+	    	existing_person.name = me['name']
+        existing_person.first_name = me['first_name']
+        existing_person.last_name = me['last_name']
+        existing_person.fb_link = me['link']
+        existing_person.fb_username = me['username']
+        existing_person.birthday = format_date
+        existing_person.gender = me['gender']
+        existing_person.interested_in = interested_in_list
+        existing_person.political = me['political']
+        existing_person.email = me['email']
+        existing_person.timezone = me['timezone']
+        existing_person.locale = me['locale']
         existing_person.person_populated = 1
         existing_person.save
         new_person = existing_person
