@@ -66,6 +66,8 @@ class User < ActiveRecord::Base
       new_person = nil
       existing_person = Person.find_by_uid(user.uid)
 
+      logger.debug 'me["name"] => ' + me['name']
+
       if existing_person.blank?
 
       	logger.debug 'Person blank / does not exist'
@@ -87,7 +89,7 @@ class User < ActiveRecord::Base
 	        person_populated: 1
 	      )
 
-	    elsif existing_person.person_populated != 1
+	    elsif existing_person.person_populated != true
 
 	    	logger.debug 'Person not blank and person_populated != 1'
 
