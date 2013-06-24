@@ -119,6 +119,11 @@
       		div_html += 'Type: ' + value['type_desc'] + '<br/><br/>';
       	});
 
+        if(typeof(data) == 'undefined' || data.length == 0)
+        {
+          div_html = 'No locations found within the entered radius of the clicked point on the map'
+        }
+
       	$('#map-data').html(div_html);
 
       // 	setTimeout(function() {

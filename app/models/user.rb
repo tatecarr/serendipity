@@ -63,25 +63,55 @@ class User < ActiveRecord::Base
       #
       # PERSON.FIND_BY_UID(...)
 
-      new_person = Person.create(
-        uid: user.uid,
-        name: me['name'],
-        first_name: me['first_name'],
-        last_name: me['last_name'],
-        fb_link: me['link'],
-        fb_username: me['username'],
-        birthday: format_date,
-        gender: me['gender'],
-        interested_in: interested_in_list,
-        political: me['political'],
-        email: me['email'],
-        timezone: me['timezone'],
-        locale: me['locale'],
-        person_populated: 1
-      )
+      new_person = nil
+      existing_person = Person.find_by_uid(user.uid)
 
-puts 'Gets to here-----'
-puts birthday_ymd,birthday_ymd.id,'after'
+      if existing_person.blank?
+
+	      new_person = Person.create(
+	        uid: user.uid,
+	        name: me['name'],
+	        first_name: me['first_name'],
+	        last_name: me['last_name'],
+	        fb_link: me['link'],
+	        fb_username: me['username'],
+	        birthday: format_date,
+	        gender: me['gender'],
+	        interested_in: interested_in_list,
+	        political: me['political'],
+	        email: me['email'],
+	        timezone: me['timezone'],
+	        locale: me['locale'],
+	        person_populated: 1
+	      )
+
+	    elsif existing_person.person_populated != 1
+
+	    	existing_person.name = me['name'],
+        existing_person.first_name = me['first_name'],
+        existing_person.last_name = me['last_name'],
+        existing_person.fb_link = me['link'],
+        existing_person.fb_username = me['username'],
+        existing_person.birthday = format_date,
+        existing_person.gender = me['gender'],
+        existing_person.interested_in = interested_in_list,
+        existing_person.political = me['political'],
+        existing_person.email = me['email'],
+        existing_person.timezone = me['timezone'],
+        existing_person.locale = me['locale'],
+        existing_person.person_populated = 1
+        existing_person.save
+        new_person = existing_person
+
+      else
+
+      	return 1
+
+	    end
+
+
+# puts 'Gets to here-----'
+# puts birthday_ymd,birthday_ymd.id,'after'
 
 
       unless birthday_ymd.blank?
@@ -215,9 +245,9 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
       locations = @graph.get_connections('me', 'locations')
       locations.each do |loc|
 
-        loc_name = loc['place']['name']
-        loc_lat = loc['place']['location']['latitude']
-        loc_long = loc['place']['location']['longitude']
+        loc_name = loc['place']['name'] if loc['place']
+        loc_lat = loc['place']['location']['latitude'] if loc['place'] && loc['place']['location']
+        loc_long = loc['place']['location']['longitude'] if loc['place'] && loc['place']['location']
         loc_date = loc['created_time'].to_date
         loc_ymddate = Ymddate.get_or_create(loc_date.year, loc_date.month, loc_date.day) unless loc_date.blank?
         loc_ymddate_id = loc_ymddate.id unless loc_ymddate.blank?
@@ -227,9 +257,9 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
         # 	times -- do we want to keep this too and have a separate relationship_detail/"instances" table?  So it's kind of header/detail relationship?
         loc_src = 'Checkin' # loc['type']
 
-        loc_id = loc['place']['id']
+        loc_id = loc['place']['id'] if loc['place']
         loc_details = @graph.get_object(loc_id)
-        loc_type = loc_details['category']
+        loc_type = loc_details['category'] if loc_details
 
 
         tmp_place = Place.get_or_create(loc_lat, loc_long, loc_name, loc_type)
@@ -340,14 +370,19 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 		if phrase == 'stlcardinals'
 
-			RelationshipType.delete_all			
+			Person.delete_all
+			Place.delete_all
+			RelationshipType.delete_all
+			Relationship.delete_all
+			PopulatedInfo.delete_all
+			Thing.delete_all
+			Ymddate.delete_all
 
 		else
 			puts 'Please put in the phrase to make sure you really want to do this.  It could take a little bit.'
 		end
 		
 	end
-
 
 	def self.refresh_all_user_data(phrase)
 
