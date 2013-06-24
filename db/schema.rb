@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130620183302) do
+ActiveRecord::Schema.define(:version => 20130621202606) do
 
   create_table "dbpedia_infos", :force => true do |t|
     t.string   "info_type_desc"
@@ -57,32 +57,6 @@ ActiveRecord::Schema.define(:version => 20130620183302) do
     t.string   "resource_id"
   end
 
-  create_table "person_educations", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "name"
-    t.string   "type_desc"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.string   "education_id"
-  end
-
-  create_table "person_friends", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "friend_name"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "friend_uid"
-  end
-
-  create_table "person_likes", :force => true do |t|
-    t.integer  "person_id"
-    t.string   "category"
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "like_id"
-  end
-
   create_table "places", :force => true do |t|
     t.decimal  "lat",        :precision => 12, :scale => 4
     t.decimal  "long",       :precision => 12, :scale => 4
@@ -102,17 +76,10 @@ ActiveRecord::Schema.define(:version => 20130620183302) do
     t.datetime "updated_at",      :null => false
   end
 
-  create_table "relationship_categories", :force => true do |t|
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
   create_table "relationship_types", :force => true do |t|
     t.string   "relationship_desc"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
-    t.integer  "relation_category_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "relationships", :force => true do |t|
@@ -123,6 +90,8 @@ ActiveRecord::Schema.define(:version => 20130620183302) do
     t.integer  "relationship_type"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.date     "relationship_date"
+    t.integer  "ymddate_id"
   end
 
   create_table "things", :force => true do |t|

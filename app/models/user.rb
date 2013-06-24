@@ -118,7 +118,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 
 
-      populate_notable_people(hometown_record)
+      # populate_notable_people(hometown_record)
 
 
 
@@ -139,7 +139,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
         )
 
 
-      populate_notable_people(curr_location_record)
+      # populate_notable_people(curr_location_record)
 
 
 
@@ -176,25 +176,56 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
       end
 
 
+      #<TODO> need to add friends as a Relationship record not separate table
       #friends
       friends = @graph.get_connections('me', 'friends')
       friends.each do |f|
-        PersonFriend.create(
-          person_id: new_person.id,
-          friend_uid: f['id'],
-          friend_name: f['name']
+
+
+      	# lookup the friend by UID, 
+      	tmp_friend = Person.find_by_uid(f['id'])
+
+      	# if not found, create a person record first
+      	if tmp_friend.blank?
+
+      		tmp_friend = Person.create(
+		        uid: f['id'],
+		        name: f['name']
+		      )
+
+      	end
+
+      	# if found, we do not create a Person record but do create a relationship between the two as Friend
+      	# now create relationship between the two since we'll have the friend's person record one way or another
+      	Relationship.create(
+          source_id:new_person.id,
+          source_type:EntityType.get_entity_type_id('Person'),
+          target_id:tmp_friend.id,
+          target_type:EntityType.get_entity_type_id('Person'),
+          relationship_type:RelationshipType.get_relationship_type_id('Friend')
         )
+
       end
 
 
       # "locations" are many different things in FB that have had location added e.g. Posts, Photos, Status
+			#
+			# Adding relationship as "Checkin" because these are photos, places, etc. that get returned by the FB "locations" connection
+			#      
       locations = @graph.get_connections('me', 'locations')
       locations.each do |loc|
 
         loc_name = loc['place']['name']
         loc_lat = loc['place']['location']['latitude']
         loc_long = loc['place']['location']['longitude']
-        loc_src = loc['type']
+        loc_date = loc['created_time'].to_date
+        loc_ymddate = Ymddate.get_or_create(loc_date.year, loc_date.month, loc_date.day) unless loc_date.blank?
+        loc_ymddate_id = loc_ymddate.id unless loc_ymddate.blank?
+
+        # changing to be checkin 
+        # <TODO> Need to keep the 'type' as well though?  This is photo, status (and maybe more) -- could 'checkin' to a certain location many, many
+        # 	times -- do we want to keep this too and have a separate relationship_detail/"instances" table?  So it's kind of header/detail relationship?
+        loc_src = 'Checkin' # loc['type']
 
         loc_id = loc['place']['id']
         loc_details = @graph.get_object(loc_id)
@@ -204,12 +235,14 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
         tmp_place = Place.get_or_create(loc_lat, loc_long, loc_name, loc_type)
 
 
-        Relationship.create(
-          source_id:new_person.id,
-          source_type:EntityType.get_entity_type_id('Person'),
-          target_id:tmp_place.id,
-          target_type:EntityType.get_entity_type_id('Place'),
-          relationship_type:RelationshipType.get_relationship_type_id(loc_src)
+        Relationship.create_ignore_dupe(
+          new_person.id,
+          EntityType.get_entity_type_id('Person'),
+          tmp_place.id,
+          EntityType.get_entity_type_id('Place'),
+          RelationshipType.get_relationship_type_id(loc_src),
+          loc_date,
+          loc_ymddate_id
         )
 
       end
@@ -267,6 +300,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 	def self.delete_all_a_users_stuff(user)
 
+		person_name = '(Unknown)'
 		person_deleted = 0
 		src_rel_deleted = 0
 		tgt_rel_deleted = 0
@@ -278,13 +312,17 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 		if curr_user_person
 			curr_person_id = curr_user_person.id
 
+
+			# <TODO> should probably restrict this to not delete FRIEND and potentially other relationships -- for Friend it possibly should
+			# only be the relationships where the user is the source???
+
 			src_rel_deleted = Relationship.where(:source_id => curr_person_id, :source_type => person_type_id).delete_all
 			tgt_rel_deleted = Relationship.where(:target_id => curr_person_id, :target_type => person_type_id).delete_all
 
-			pf_deleted = PersonFriend.where(:person_id => curr_person_id).delete_all
 
 			tmp_person = Person.find_by_uid(user.uid)
 			if tmp_person
+				person_name = tmp_person.name
 				tmp_person.delete
 				person_deleted = 1
 			end
@@ -293,8 +331,21 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 		user.person_populated = 0
 		user.save
 
-		puts 'Deleted person? ' + person_deleted.to_s, 'Src relations deleted: ' + src_rel_deleted.to_s, 'Tgt relations deleted: ' + tgt_rel_deleted.to_s, 'Friends relations deleted: ' + pf_deleted.to_s
+		puts 'Name: ' + person_name, 'Deleted person? ' + person_deleted.to_s, 'Src relations deleted: ' + src_rel_deleted.to_s, 'Tgt relations deleted: ' + tgt_rel_deleted.to_s, '---------------'
 
+	end
+
+
+	def self.remove_all_support_records(phrase)
+
+		if phrase == 'stlcardinals'
+
+			RelationshipType.delete_all			
+
+		else
+			puts 'Please put in the phrase to make sure you really want to do this.  It could take a little bit.'
+		end
+		
 	end
 
 
@@ -473,12 +524,17 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
     end
 
+    test_date_string = ""
+
     consolodated_results.each do |con_res_id, con_res_vals|
 
 	    tmp_format_date = nil
 	    tmp_birthday_ymd = nil
 	    unless con_res_vals['birthday'].blank?
-	      split_date = con_res_vals['birthday'].split('/')
+
+	    	test_date_string += con_res_vals['birthday'] + "\n"
+
+	      split_date = con_res_vals['birthday'].split('-') # this is hyphen for DBpedia birthdays looks like -- but FB uses '/'
 	      tmp_birthday_ymd = Ymddate.get_or_create(split_date[0], split_date[1], split_date[2])
 	      tmp_format_date = con_res_vals['birthday']
 	    end
@@ -520,6 +576,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 	  end
 
+	  puts test_date_string
 		
 	end
 

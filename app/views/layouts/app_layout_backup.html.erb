@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Serendipity</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+
+
+
+	<% if current_user %>
+		
+		<table class='spaced_table'>
+			<tr>
+				<td>Email: <%= current_user.email %></td>
+				<td><%= image_tag @picture_url %></td>
+				<td>Provider: <%= current_user.provider %></td>
+				<td>UID: <%= current_user.uid %></td>
+				<td><%= link_to 'Logout', logout_path, :method => 'delete' %></td>
+			</tr>
+		</table>
+
+		<table class='spaced_table links_header'>
+			<tr>
+				<td>LINKS:</td>
+				<td><%= link_to 'Home', root_path %></td>
+				<td><%= link_to 'Places', places_path %></td>
+				<td><%= link_to 'My Friends', home_my_friends_path %></td>
+				<td><%= link_to '"Locations"', home_locations_path %></td>
+				<td><%= link_to 'My Feed', home_my_feed_path %></td>
+				<td><%= link_to 'My Photos', home_my_photos_path %></td>
+				<td><%= link_to 'Linked Data', home_linked_data_path %></td>
+				<td><%= link_to 'Relation Categories', relationship_categories_path %></td>
+				<td><%= link_to 'Relation Types', relationship_types_path %></td>
+			</tr>
+		</table>
+
+	<% else %>
+		<table class='spaced_table'>
+			<tr>
+				<td><%= link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook) %></td>
+			</tr>
+		</table>
+	<% end %>
+
+
+	
+	<p class="notice"><%= notice %></p>
+	<p class="alert"><%= alert %></p>
+
+	<%= yield %>
+
+</body>
+</html>

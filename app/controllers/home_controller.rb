@@ -186,6 +186,7 @@ class HomeController < ApplicationController
 
 private
 
+	#<TODO> This should probably go in the PERSON model since it's person related...
 	def get_notable_people(location)
 
 		location_rel = Relationship.where(:target_id => location['id'], :target_type => EntityType.get_entity_type_id('Place'),
