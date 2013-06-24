@@ -258,7 +258,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
         loc_src = 'Checkin' # loc['type']
 
         loc_id = loc['place']['id'] if loc['place']
-        loc_details = @graph.get_object(loc_id)
+        loc_details = @graph.get_object(loc_id) if !loc_id.blank?
         loc_type = loc_details['category'] if loc_details
 
 
