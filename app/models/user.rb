@@ -68,6 +68,8 @@ class User < ActiveRecord::Base
 
       if existing_person.blank?
 
+      	logger.debug 'Person blank / does not exist'
+
 	      new_person = Person.create(
 	        uid: user.uid,
 	        name: me['name'],
@@ -87,6 +89,8 @@ class User < ActiveRecord::Base
 
 	    elsif existing_person.person_populated != 1
 
+	    	logger.debug 'Person not blank and person_populated != 1'
+
 	    	existing_person.name = me['name'],
         existing_person.first_name = me['first_name'],
         existing_person.last_name = me['last_name'],
@@ -105,6 +109,7 @@ class User < ActiveRecord::Base
 
       else
 
+      	logger.debug 'Person not blank BUT person_populated == 1'
       	return 1
 
 	    end
