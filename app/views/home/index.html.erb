@@ -30,7 +30,7 @@
   	$('#clear-search').click(function() {
   		if(typeof(tmpmarker) != 'undefined') tmpmarker.setMap(null);
 	  	if(typeof(tmpcircle) != 'undefined') tmpcircle.setMap(null);
-	  	$('#map-data').html('');
+	  	$('#map-data').html('Click a point on the map to view nearby locations...');
   	});
 
   	$('#places-search').click(function() {
@@ -180,6 +180,6 @@
 
 <div id='map_outer_container'>
   <div id="map-canvas"></div>
-  <div id='map-data' class='location_results'></div>
+  <div id='map-data' class='location_results'>Click a point on the map to view nearby locations...</div>
 </div>
 

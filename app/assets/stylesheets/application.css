@@ -24,3 +24,9 @@
 .linked_data_table td {
 	padding:4px;
 }
+
+.facebook_login_icon {
+	margin:auto;
+	width:200px;
+	border-radius:10px;
+}
