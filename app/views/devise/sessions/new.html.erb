@@ -16,11 +16,15 @@
 
 <%= render "devise/shared/links" %>
  -->
-<div style='height:160px;'></div>
+<div style='height:100px;'></div>
 <div style='text-align:center;'>
 	<h1>Welcome to Serendipity...</h1>
 	<h1 class='subheader'>Click below to login with Facebook.</h1>
-	<div class='facebook_login_icon'>
+	<div id='fb_login_button' class='facebook_login_icon'>
 		<%= link_to image_tag('facebookIcon.jpg'), user_omniauth_authorize_path(:facebook) %>
+	</div>
+	<div id='fb_login_loading_gif' style='display:none;'>
+		<%= image_tag('loading1.gif') %>
+		<h4 class='subheader'>Note: the first login may take a few moments...</h4>
 	</div>
 </div>

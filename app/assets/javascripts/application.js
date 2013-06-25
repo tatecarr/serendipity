@@ -18,6 +18,23 @@
 //= require_tree .
 
 
+$(document).ready(function(){
+	
+	$('#fb_login_button').click(function() {
+		$('#fb_login_button').hide();
+		$('#nav_fb_login_button').hide();
+		$('#fb_login_loading_gif').show();
+	});
+
+	$('#nav_fb_login_button').click(function() {
+		$('#fb_login_button').hide();
+		$('#nav_fb_login_button').hide();
+		$('#fb_login_loading_gif').show();
+	});
+
+});
+
+
 var places_result_set = [];
 
 
