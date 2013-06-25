@@ -351,7 +351,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 
 			# <TODO> should probably restrict this to not delete FRIEND and potentially other relationships -- for Friend it possibly should
-			# only be the relationships where the user is the source???
+			# only be the relationships where the user is the source???!!!
 
 			src_rel_deleted = Relationship.where(:source_id => curr_person_id, :source_type => person_type_id).delete_all
 			tgt_rel_deleted = Relationship.where(:target_id => curr_person_id, :target_type => person_type_id).delete_all
@@ -577,8 +577,13 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 	    	test_date_string += con_res_vals['birthday'] + "\n"
 
 	      split_date = con_res_vals['birthday'].split('-') # this is hyphen for DBpedia birthdays looks like -- but FB uses '/'
-	      tmp_birthday_ymd = Ymddate.get_or_create(split_date[0], split_date[1], split_date[2])
-	      tmp_format_date = con_res_vals['birthday']
+	      
+	      if !split_date.blank? && split_date.size == 3
+	      	puts 'VALID BIRTHDAY',''
+		      tmp_birthday_ymd = Ymddate.get_or_create(split_date[0], split_date[1], split_date[2])
+		      tmp_format_date = con_res_vals['birthday']
+		    end
+
 	    end
 
 
