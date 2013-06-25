@@ -9,6 +9,7 @@ class Person < ActiveRecord::Base
   	tmp_person = Person.find_by_resource_id(resource_id)
 
   	if tmp_person.blank?
+  		logger.debug 'Person was not found, should be creating...'
   		tmp_person = Person.create(:name => name, :birthday => birthday, :resource_id => resource_id)
   	end
 

@@ -586,6 +586,9 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 	    end
 
+	    logger.debug 'Format Date: ' + tmp_format_date
+	    logger.debug 'bday YMD: ' + tmp_birthday_ymd
+
 
 	    tmp_new_person = Person.get_or_create(
         con_res_vals['name'],
@@ -593,7 +596,8 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
         con_res_id
       )
 
-
+	    logger.debug tmp_new_person
+	    logger.debug tmp_new_person['id']
 
 
       unless tmp_birthday_ymd.blank?
