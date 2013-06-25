@@ -14,9 +14,22 @@
 			<tr>
 				<td><%= f['from']['name'] %></td>
 				<td><%= f['type'] %></td>
-				<td><%= f['place']['name'] %></td>
-				<td><%= f['place']['location']['latitude'] %></td>
-				<td><%= f['place']['location']['longitude'] %></td>
+
+				<% if !f['place'].blank? %>
+					<td><%= f['place']['name'] %></td>
+
+					<% if !f['place']['location'].blank? %>
+						<td><%= f['place']['location']['latitude'] %></td>
+						<td><%= f['place']['location']['longitude'] %></td>
+					<% else %>
+						<td></td>
+						<td></td>
+					<% end %>
+				<% else %>
+					<td></td>
+					<td></td>
+					<td></td>
+				<% end %>
 				<td><%= f['created_time'] %></td>
 			</tr>
 
