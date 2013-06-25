@@ -586,9 +586,8 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 	    end
 
-	    puts 'Format Date: ' + tmp_format_date
-	    puts 'bday YMD: ' + tmp_birthday_ymd.to_s
-
+	    # puts 'Format Date: ' + tmp_format_date
+	    # puts 'bday YMD: ' + tmp_birthday_ymd.to_s
 
 	    tmp_new_person = Person.get_or_create(
         con_res_vals['name'],
@@ -596,8 +595,8 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
         con_res_id
       )
 
-	    puts tmp_new_person
-	    puts tmp_new_person['id']
+	    # puts tmp_new_person
+	    # puts tmp_new_person['id']
 
 
       unless tmp_birthday_ymd.blank?
@@ -627,7 +626,7 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 
 	  end
 
-	  puts test_date_string
+	  # puts test_date_string
 		
 	end
 
