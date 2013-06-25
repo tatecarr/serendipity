@@ -1,6 +1,12 @@
 class Ymddate < ActiveRecord::Base
   attr_accessible :day, :month, :year
 
+  def to_s
+
+    to_return = self.year.to_s + '-' + self.month.to_s + '-' + self.day.to_s
+    
+  end
+
   def self.get_or_create(year, month, day)
 
   	ymd = Ymddate.where(:year => year.to_i, :month => month.to_i, :day => day.to_i)
