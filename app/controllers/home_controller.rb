@@ -224,7 +224,6 @@ class HomeController < ApplicationController
 		unless @place_id.blank?
 
 			@serendipities = sc.get_moments(Place.find(@place_id))
-			
 
 		end
 

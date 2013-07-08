@@ -2,7 +2,6 @@ class	SerenCollection
 
 	attr_accessor :active_seren_objects, :inactive_seren_objects, :relations_to_find, :relations_found
 
-
 	def initialize()
 
 		@active_seren_objects = Array.new

@@ -11,11 +11,6 @@ class SerenObj
 		@last_entity = entity_array.last
 
 		@active = true
-
-
-		# <TODO> They are going to duplicate?  It's really a growing tree of relationships, not a static list of relationships that just grows
-		# then you'd be restricted to a list in length equal to the number of results from the first query
-
 		
 	end
 
