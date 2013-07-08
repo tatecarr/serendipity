@@ -1,6 +1,12 @@
 class Place < ActiveRecord::Base
   attr_accessible :lat, :long, :name, :tags, :type_desc
 
+  def to_s
+
+    return self.name + ' ('+self.type_desc+')'
+    
+  end
+
   def self.find_by_lat_lng(lat, lng, search_radius='100')
 
 

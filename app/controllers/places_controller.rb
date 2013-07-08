@@ -92,11 +92,7 @@ class PlacesController < ApplicationController
 
     @places = Place.find_by_lat_lng(lat, lng, search_radius)
 
-
-
     # puts 'LatLng-----',lat,lng,'-----LatLng'
-
-
 
     respond_to do |format|
       format.html # index.html.erb

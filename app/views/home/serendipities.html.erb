@@ -1,0 +1,59 @@
+
+
+
+<h1>Serendipities</h1>
+
+<%= form_tag('/home/serendipities', :id => 'seren-form') %>
+
+	<div id='serendipity-search' class='row'>
+	  <fieldset>
+	    <legend>Serendipity Search</legend>
+
+	    <div class='large-4 columns'>
+	      <label>Available Locations</label>
+	      <%= select_tag(:place_id, options_from_collection_for_select(Place.all, :id, :name, @place_id)) %>
+	    </div>
+	    <div class='large-4 columns'>
+	      <label>&nbsp;</label>
+	      <input id='seren-search' type='button' class='button prefix' value='Find Serendipity'/>
+	    </div>
+	  </fieldset>
+	</div>
+
+</form>
+
+
+<% if @serendipities.blank? %>
+
+	<% if @place_id.blank? %>
+
+		<div>
+			<h2>Choose a location and then click to search for serendipity!</h2>
+		</div>
+
+	<% else %>
+
+		<div>
+			<h2>There were no results, please try another location...</h2>
+		</div>
+
+	<% end %>
+
+<% else %>
+
+<% @serendipities.keys.sort.reverse.each do |key| %>
+
+	<h2 class='subheader'><%= key %> connections</h2>
+
+	<% @serendipities[key].each do |moment| %>
+
+		<%= moment.to_s %> <br/><br/>
+
+	<% end %>
+
+
+	<hr>
+
+<% end %>
+
+<% end %>

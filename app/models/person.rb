@@ -4,6 +4,12 @@ class Person < ActiveRecord::Base
 
   validates_uniqueness_of :uid, :allow_nil => true, :allow_blank => true
 
+  def to_s
+
+    return self.name
+    
+  end
+
   def self.get_or_create(name, birthday, resource_id)
 
   	tmp_person = Person.find_by_resource_id(resource_id)

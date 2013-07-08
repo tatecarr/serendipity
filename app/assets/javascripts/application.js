@@ -19,6 +19,10 @@
 
 
 $(document).ready(function(){
+
+	$('#seren-search').click(function() {
+		$('#seren-form').submit();
+	});
 	
 	$('#fb_login_button').click(function() {
 		$('#fb_login_button').hide();

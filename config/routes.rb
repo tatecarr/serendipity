@@ -88,6 +88,8 @@ Serendipity::Application.routes.draw do
   match 'home/my_friends' => 'home#my_friends'
   match 'home/linked_data' => 'home#linked_data'
 
+  match 'home/serendipities' => 'home#serendipities'
+  match 'home/relationships' => 'home#relationships'
   match 'home/delete_all_my_stuff' => 'home#delete_all_my_stuff'
 
 

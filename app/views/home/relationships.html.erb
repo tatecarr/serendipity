@@ -1,0 +1,26 @@
+<h2>Relationship Builder</h2>
+
+
+<table>
+
+	<tr>
+		<% @result.fields.each do |field| %>
+			<th><%= field %></th>
+		<% end %>
+	</tr>
+
+	<% for row_index in 0..@result.count-1 %>
+		<tr>
+
+			<% for col_index in 0..@result.fields.count-1 %>
+
+				<td><%= @result.getvalue(row_index, col_index) %></td>
+
+			<% end %>
+
+		</tr>
+	<% end %>
+
+
+</table>
+

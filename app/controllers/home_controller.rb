@@ -14,22 +14,22 @@ class HomeController < ApplicationController
 		puts '-----Likes', profile, '-----Likes'
 
 
-		sparql = SPARQL::Client.new("http://dbpedia.org/sparql")
+		# sparql = SPARQL::Client.new("http://dbpedia.org/sparql")
 
-		query = 'PREFIX prop: <http://dbpedia.org/property/>
+		# query = 'PREFIX prop: <http://dbpedia.org/property/>
 
-							select ?place ?name ?pop_total ?lat ?long
-							where
-							{
+		# 					select ?place ?name ?pop_total ?lat ?long
+		# 					where
+		# 					{
 							    
-							    ?place foaf:name ?name ;
-							    rdf:type yago:TownsInVermont ;
-							    		foaf:name "Middletown Springs, Vermont"@en ;
-							        dbpedia-owl:populationTotal ?pop_total ;
-							        geo:lat ?lat ;
-							        geo:long ?long .
+		# 					    ?place foaf:name ?name ;
+		# 					    rdf:type yago:TownsInVermont ;
+		# 					    		foaf:name "Middletown Springs, Vermont"@en ;
+		# 					        dbpedia-owl:populationTotal ?pop_total ;
+		# 					        geo:lat ?lat ;
+		# 					        geo:long ?long .
 
-							}'
+		# 					}'
 
     # rdf:type dbpedia-owl:Place ;
     # FILTER regex(?name, "Middletown Springs")
@@ -41,6 +41,16 @@ class HomeController < ApplicationController
 		# 	puts '', res.inspect, ''
 		# end
 		# puts 'SPARQL-----'
+
+
+
+
+
+
+
+
+
+
 
 
 		respond_to do |format|
@@ -177,6 +187,51 @@ class HomeController < ApplicationController
 		current_user.save
 
 	end
+
+	def relationships
+
+
+		s = SerenObj.new
+
+
+		c = ActiveRecord::Base.connection
+
+    p = Place.find_by_name('Charlotte, North Carolina')
+
+    puts p.inspect
+
+    unless p.blank?
+
+      puts p.lat, p.long
+
+      pt = EntityType.get_entity_type_id('Place')
+
+      @result = c.execute('select * from relationships r where r.target_id = '+p.id.to_s+' and r.target_type = '+pt.to_s)
+
+    end
+
+	end
+
+
+	def serendipities
+
+		@place_id = params[:place_id]
+
+		@places = Place.all
+
+		sc = SerenCollection.new
+
+		unless @place_id.blank?
+
+			@serendipities = sc.get_moments(Place.find(@place_id))
+			
+
+		end
+
+
+		
+	end
+
 
 private
 
