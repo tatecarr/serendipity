@@ -114,7 +114,7 @@ iteration_count += 1
 					end
 
 					# if the new dupeobj array.size == 0, then move this seren_obj to the inactive_seren_obj array
-					if sub_new_seren_objs.length == 0
+					if sub_new_seren_objs.length == 0 || active_so.length > 4
 					
 						active_so.active = false
 						indexes_to_inactivate.push(index)
