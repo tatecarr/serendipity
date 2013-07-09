@@ -215,17 +215,16 @@ class HomeController < ApplicationController
 
 	def serendipities
 
-		@place_id = params[:place_id]
+		# @place_id = current_user.person # params[:place_id]
 
-		@places = Place.all
 
 		sc = SerenCollection.new
 
-		unless @place_id.blank?
+		# unless @place_id.blank?
 
-			@serendipities = sc.get_moments(Place.find(@place_id))
+			@serendipities = sc.get_moments(current_user.person)
 
-		end
+		# end
 
 
 		

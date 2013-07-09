@@ -15,9 +15,12 @@ class	SerenCollection
 	def get_moments(place)
 
 
-		place_type_id = EntityType.get_entity_type_id('Place')
-
+		place_type_id = EntityType.get_entity_type_id('Person')
 		place_unique = to_unique(place.id, place_type_id)
+
+		# person_type_id = EntityType.get_entity_type_id('Person')
+		# person_
+
 
 		rels = get_relevant_relations(place.id, place_type_id)
 
@@ -114,7 +117,7 @@ iteration_count += 1
 					end
 
 					# if the new dupeobj array.size == 0, then move this seren_obj to the inactive_seren_obj array
-					if sub_new_seren_objs.length == 0 || active_so.length > 4
+					if sub_new_seren_objs.length == 0
 					
 						active_so.active = false
 						indexes_to_inactivate.push(index)
@@ -139,7 +142,12 @@ iteration_count += 1
 # 				if so.active == false
 # puts 'DEBUG--inactive getting moved:  ' + @active_seren_objects[index].to_s
 					tmp_so = @active_seren_objects.delete_at(index)
-					@inactive_seren_objects.push(tmp_so) unless tmp_so.blank?
+
+
+					# Serendipities less than 5 entities in length are likely not interesting, deleting them straight up.
+					if tmp_so.length >= 5
+						@inactive_seren_objects.push(tmp_so) unless tmp_so.blank?
+					end
 
 				# end
 			end

@@ -1,8 +1,8 @@
 
 
 
-<h1>Serendipities</h1>
-
+<h1>My Connections</h1>
+<!-- 
 <%= form_tag('/home/serendipities', :id => 'seren-form') %>
 
 	<div id='serendipity-search' class='row'>
@@ -11,7 +11,7 @@
 
 	    <div class='large-4 columns'>
 	      <label>Available Locations</label>
-	      <%= select_tag(:place_id, options_from_collection_for_select(Place.all, :id, :name, @place_id)) %>
+	      <%= select_tag(:place_id, options_from_collection_for_select(Person.all, :id, :name, @place_id)) %>
 	    </div>
 	    <div class='large-4 columns'>
 	      <label>&nbsp;</label>
@@ -21,6 +21,9 @@
 	</div>
 
 </form>
+ -->
+
+
 
 
 <% if @serendipities.blank? %>
@@ -41,19 +44,25 @@
 
 <% else %>
 
-<% @serendipities.keys.sort.reverse.each do |key| %>
+	<div class="section-container auto" data-section>
 
-	<h2 class='subheader'><%= key %> connections</h2>
+		<% @serendipities.keys.sort.reverse.each_with_index do |key, index| %>
 
-	<% @serendipities[key].each do |moment| %>
+		  <section>
+		    <p class="title" data-section-title><a href="#panel<%= index %>"><%= key %> connections</a></p>
+		    <div class="content" data-section-content>
+		      
+		      <% @serendipities[key].each do |moment| %>
 
-		<%= moment.to_s %> <br/><br/>
+						<%= moment.to_s %> <br/><br/>
 
-	<% end %>
+					<% end %>
 
+		    </div>
+		  </section>
 
-	<hr>
+		<% end %>
 
-<% end %>
+	</div>
 
 <% end %>
