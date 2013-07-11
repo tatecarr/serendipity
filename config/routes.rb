@@ -21,6 +21,7 @@ Serendipity::Application.routes.draw do
   resources :places
   match 'gnp' => 'places#get_nearby_places'
   match 'google_gnp' => 'places#get_google_nearby_places'
+  match 'nearby_connections' => 'places#get_nearby_connections'
 
   resources :tmp_lat_longs
 

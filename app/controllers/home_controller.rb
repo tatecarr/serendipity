@@ -220,12 +220,7 @@ class HomeController < ApplicationController
 
 		sc = SerenCollection.new
 
-		# unless @place_id.blank?
-
-			@serendipities = sc.get_moments(current_user.person)
-
-		# end
-
+		@serendipities = sc.get_moments(current_user.person.id, EntityType.find_by_entity_type_desc('Person').id, {}, false)
 
 		
 	end

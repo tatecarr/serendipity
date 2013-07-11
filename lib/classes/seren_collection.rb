@@ -12,44 +12,61 @@ class	SerenCollection
 		
 	end
 
-	def get_moments(place)
+	def get_moments(entities, entity_type_id, options, moments_as_string=false)
+
+		curr_user_person_id = options['curr_user_person_id']
+		curr_person_unique = to_unique(curr_user_person_id, EntityType.get_entity_type_id('Person'))
+		min_user_dist_from_origin = options['min_user_dist_from_origin']
+		user_must_be_present = options['user_must_be_present']
+
+		entity_array = []
+
+		# This allows an array of entities, or a single entity to be passed.  If array, just assign to value
+		# now we can iterate over the array for both cases because we'll have an array to work with
+		if entities.class.to_s == 'Array'
+			entity_array = entities
+		else # type would be just a string/int/single value
+			# else if a single entity is passed, add it to array
+			entity_array.push(entities)
+		end
+
+		entity_array.each do |entity_id|
+
+			puts 'debug----',entity_id, entity_id.class
+
+			entity_unique = to_unique(entity_id, entity_type_id)
 
 
-		place_type_id = EntityType.get_entity_type_id('Person')
-		place_unique = to_unique(place.id, place_type_id)
-
-		# person_type_id = EntityType.get_entity_type_id('Person')
-		# person_
+			rels = get_relevant_relations(entity_id, entity_type_id)
 
 
-		rels = get_relevant_relations(place.id, place_type_id)
+			rels.each do |rel|
 
+				# obj = nil
+				obj_unique = nil
 
-		rels.each do |rel|
+				# if lookup was the source, we want to print target
+				if(rel.source_id == entity_id and rel.source_type == entity_type_id)
 
-			# obj = nil
-			obj_unique = nil
+					# obj = self.get_entity(rel.target_id, rel.target_type)
+					obj_unique = to_unique(rel.target_id, rel.target_type)
 
-			# if lookup was the source, we want to print target
-			if(rel.source_id == place.id and rel.source_type == place_type_id)
+				# else lookup was target, want to print the source
+				else
 
-				# obj = self.get_entity(rel.target_id, rel.target_type)
-				obj_unique = to_unique(rel.target_id, rel.target_type)
+					# obj = self.get_entity(rel.source_id, rel.source_type)
+					obj_unique = to_unique(rel.source_id, rel.source_type)
 
-			# else lookup was target, want to print the source
-			else
+				end
 
-				# obj = self.get_entity(rel.source_id, rel.source_type)
-				obj_unique = to_unique(rel.source_id, rel.source_type)
+				@relations_to_find.push(obj_unique) unless @relations_to_find.include?(obj_unique)
+
+				@active_seren_objects.push(SerenObj.new([entity_unique, obj_unique], {obj_unique => rel.relationship_type}))
+
+				# puts 'Relation:  ' + RelationshipType.find(rel.relationship_type).relationship_desc + ' ' + obj.to_s
+
 
 			end
-
-			@relations_to_find.push(obj_unique) unless @relations_to_find.include?(obj_unique)
-
-			@active_seren_objects.push(SerenObj.new([place_unique, obj_unique], {obj_unique => rel.relationship_type}))
-
-			# puts 'Relation:  ' + RelationshipType.find(rel.relationship_type).relationship_desc + ' ' + obj.to_s
-
 
 		end
 
@@ -59,7 +76,11 @@ iteration_count = 0
 		# get all the "last entities" for the objs
 
 		# while relations_to_find.length > 0, take the first one (iterate over the relations_to_find)
+
+		# while(false)
 		while(@relations_to_find.length > 0)
+
+
 iteration_count += 1
 # puts 'DEBUG--iteration count: ' + iteration_count.to_s
 # puts 'DEBUG--relations_to_find length: ' + @relations_to_find.length.to_s
@@ -116,16 +137,44 @@ iteration_count += 1
 
 					end
 
+
+					# BEGIN FILTERS for the SerenObj ----------------------------------------
+
+					# check that the user is not within X links from SerenObj origin
+					if(!min_user_dist_from_origin.blank?)
+
+						if active_so.unique_entities.include?(curr_person_unique) && active_so.length < (min_user_dist_from_origin)
+							active_so.active = false
+							@active_seren_objects[index] = nil
+						end
+
+					end
+
+					# END FILTERS for the SerenObj ----------------------------------------
+
+
 					# if the new dupeobj array.size == 0, then move this seren_obj to the inactive_seren_obj array
-					if sub_new_seren_objs.length == 0
+					if active_so.active == true && (sub_new_seren_objs.length == 0) # || active_so.length > 3)
 					
-						active_so.active = false
-						indexes_to_inactivate.push(index)
+						move_to_inactive = true
+						# if we enforce presence of current user, then check if they're included, if so, move to inactive array, otherwise delete
+						if(!user_must_be_present.blank?)
+							if user_must_be_present == true && !(active_so.unique_entities).include?(curr_person_unique)
+								move_to_inactive = false
+								active_so.active = false
+								@active_seren_objects[index] = nil
+							end
+						end
+
+						if move_to_inactive
+							active_so.active = false
+							indexes_to_inactivate.push(index)
+						end
 # puts 'DEBUG--no results, setting active=FALSE:  ' + active_so.to_s
 
 					# else we have new obj to add to the active_seren_objects
 					# remove the previous obj--duplicate is returned on adding, which is "another level deep", don't need old one
-					else
+					elsif active_so.active == true
 						@active_seren_objects[index] = nil # setting to nil, then compact! the array will remove
 						new_seren_objs += sub_new_seren_objs
 					end
@@ -145,7 +194,7 @@ iteration_count += 1
 
 
 					# Serendipities less than 5 entities in length are likely not interesting, deleting them straight up.
-					if tmp_so.length >= 5
+					if tmp_so.length >= 0 #5
 						@inactive_seren_objects.push(tmp_so) unless tmp_so.blank?
 					end
 
@@ -161,9 +210,17 @@ iteration_count += 1
 		@inactive_seren_objects.each do |iso|
 			len = iso.length
 			if moments.keys.include?(len)
-				moments[len] += [iso]
+				if moments_as_string
+					moments[len] += [iso.to_s]
+				else
+					moments[len] += [iso]
+				end
 			else
-				moments[len] = [iso]
+				if moments_as_string
+					moments[len] = [iso.to_s]
+				else
+					moments[len] = [iso]
+				end
 			end
 		end
 
@@ -175,6 +232,22 @@ iteration_count += 1
 
 		
 	end
+
+	# def moments_to_strings(moments)
+
+	# 	moments_string = {}
+
+	# 	moments.each do |m|
+	# 		len = m.length
+	# 		if moments.keys.include?(len)
+	# 			moments[len] += [iso]
+	# 		else
+	# 			moments[len] = [iso]
+	# 		end
+	# 	end
+
+		
+	# end
 
 
 

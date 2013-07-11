@@ -131,4 +131,39 @@ class PlacesController < ApplicationController
 
   end
 
+
+  def get_nearby_connections
+
+    return_json = {}
+    moments = nil
+
+    lat = params[:lat]
+    lng = params[:lng]
+    search_radius = params[:search_radius]
+
+    places = Place.find_by_lat_lng(lat, lng, search_radius) if !lat.blank? && !lng.blank? && !search_radius.blank?
+
+    unless places.blank?
+      
+      places_ids = places.collect { |place| place.id }
+
+      sc = SerenCollection.new
+
+      moments = sc.get_moments(places_ids, EntityType.find_by_entity_type_desc('Place').id, {'user_must_be_present' => true, 'curr_user_person_id' => current_user.person.id, 'min_user_dist_from_origin' => 4}, true)
+
+    end
+
+    if moments.blank?
+      sleep 1
+    else
+      return_json = moments
+    end
+
+
+    respond_to do |format|
+      format.json { render json: return_json }
+    end
+    
+  end
+
 end

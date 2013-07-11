@@ -5,6 +5,7 @@
 
 #map_outer_container {
 	position: relative;
+	height:500px;
 }
 
 .location_results {
@@ -19,4 +20,48 @@
 	overflow:auto;
 	color:white;
 	padding:3px;
+}
+
+.connection-loading-modal {
+	z-index: 9000;
+	position:absolute;
+	text-align:center;
+	height:100%;
+	width:100%;
+	top:0px;
+	left:0px;
+	background-color:white;
+	opacity: 0.35;
+	overflow:auto;
+	color:black;
+	padding:5px;
+	border-radius:10px;
+}
+
+.connection-loading {
+	z-index: 9001;
+	position:absolute;
+	text-align:center;
+	top:180px;
+	width:350px;
+	left:219px;
+	background-color:white;
+	opacity: 0.75;
+	overflow:auto;
+	color:black;
+	padding:5px;
+	border:2px solid #CCCCCC;
+	border-radius:10px;
+}
+
+.conn-loading-text {
+	font-size:14px;
+	font-weight:bold;
+}
+
+.init-conn-info-msg {
+	margin:20px;
+	text-align:center;
+	font-size:16px;
+	font-weight:bold;
 }

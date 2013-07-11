@@ -11,7 +11,7 @@
   #map-canvas {
     margin:0;
     padding:0;
-    height:600px;
+    height:500px;
     width:100%;
   }
 </style>
@@ -137,6 +137,72 @@
 
 			});
 
+      $('#conn-modal').show();
+      $('#conn-loading-div').show();
+
+      $.getJSON('nearby_connections.json', place_data, function(conn_data) {
+
+        local_conn_data = conn_data;
+
+        var connection_info_html = '';
+
+        var conn_keys = [];
+        for(index in conn_data)
+        {
+          conn_keys.push(index);
+        }
+        conn_keys = conn_keys.sort().reverse();
+
+        var is_populated = (conn_keys.length > 0 ? true : false);
+        
+
+        connection_info_html += '<br/><div class="section-container auto" data-section>';
+
+        $.each(conn_keys, function(index, value) {
+
+          connection_info_html += '<section>';
+
+            connection_info_html += '<p class="title" data-section-title><a id="panel'+index+'" href="#panel'+index+'">'+value+' connections</a></p>';
+            connection_info_html += '<div class="content" data-section-content>';
+                    
+
+            var moments = conn_data[value];
+            for(moment in moments)
+            {
+              connection_info_html += moments[moment] + '<br/><br/>';
+            }
+
+            connection_info_html += '</div>';
+          connection_info_html += '</section>';
+
+        });
+
+        connection_info_html += '</div>';
+
+        if(!is_populated)
+        {
+          alert('No nearby connections found.');
+        //     <div>
+        //       <h2>There were no results, please try another location...</h2>
+        //     </div>
+        }
+        else
+        {
+          $('#connection-info').html(connection_info_html);
+          $('#panel0').click();
+        }
+
+        $('#conn-modal').hide();
+        $('#conn-loading-div').hide();
+
+      }).fail(function() {
+
+        $('#conn-modal').hide();
+        $('#conn-loading-div').hide();
+        alert('Error retrieving nearby connections');
+
+      });
+
     });
 
   }
@@ -186,5 +252,9 @@
 <div id='map_outer_container'>
   <div id="map-canvas"></div>
   <div id='map-data' class='location_results'>Click a point on the map to view nearby locations...</div>
+  <div id='conn-modal' class='connection-loading-modal' style='display:none;'></div>
+  <div id='conn-loading-div' class='connection-loading' style='display:none;'><%= image_tag('loading1.gif') %><p class='conn-loading-text'>Loading connections from places nearby...</p></div>
+  <div id='conn-message-div' class='connection-loading' style='display:none;'><p class='conn-loading-text'>See nearby connection information below...</p></div>
+  <div id='connection-info'><p class='init-conn-info-msg'>Nearby connections will be listed here after clicking the map...<p></div>
 </div>
 
