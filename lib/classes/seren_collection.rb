@@ -32,8 +32,6 @@ class	SerenCollection
 
 		entity_array.each do |entity_id|
 
-			puts 'debug----',entity_id, entity_id.class
-
 			entity_unique = to_unique(entity_id, entity_type_id)
 
 
