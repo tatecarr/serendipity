@@ -220,7 +220,7 @@ class HomeController < ApplicationController
 
 		sc = SerenCollection.new
 
-		@serendipities = sc.get_moments(current_user.person.id, EntityType.find_by_entity_type_desc('Person').id, {}, false)
+		@serendipities = sc.get_moments(current_user.person.id, EntityType.find_by_entity_type_desc('Person').id, {}, true)
 
 		
 	end
