@@ -203,28 +203,31 @@ iteration_count += 1
 		end
 
 
-
 		moments = {}
-		@inactive_seren_objects.each do |iso|
+	
+		if moments_as_string
+
+			descriptions = get_seren_object_descriptions(@inactive_seren_objects)
+
+			@inactive_seren_objects.each do |iso|
 			
+				len = iso.length
 
-			len = iso.length
-
-			if moments_as_string
-
-
+				iso_string = build_seren_object_string(iso, descriptions)
 
 				if moments.keys.include?(len)
-					moments[len] += [iso.to_s]
+					moments[len] += [iso_string]
 				else
-					moments[len] = [iso.to_s]
+					moments[len] = [iso_string]
 				end
 
+			end
 
-
-			else
-				
-
+		else
+			
+			@inactive_seren_objects.each do |iso|
+			
+				len = iso.length
 
 				if moments.keys.include?(len)
 					moments[len] += [iso]
@@ -232,25 +235,7 @@ iteration_count += 1
 					moments[len] = [iso]
 				end
 
-
 			end
-
-
-
-			
-			# if moments.keys.include?(len)
-			# 	if moments_as_string
-			# 		moments[len] += [iso.to_s]
-			# 	else
-			# 		moments[len] += [iso]
-			# 	end
-			# else
-			# 	if moments_as_string
-			# 		moments[len] = [iso.to_s]
-			# 	else
-			# 		moments[len] = [iso]
-			# 	end
-			# end
 
 
 		end
@@ -263,6 +248,108 @@ iteration_count += 1
 
 		
 	end
+
+	def get_seren_object_descriptions(seren_objects)
+
+		# puts 'Start-- get_seren_object_descriptions'
+
+		person_type_id = EntityType.find_by_entity_type_desc('Person').id
+		place_type_id = EntityType.find_by_entity_type_desc('Place').id
+		thing_type_id = EntityType.find_by_entity_type_desc('Thing').id
+		date_type_id = EntityType.find_by_entity_type_desc('Date').id
+
+		to_lookup = {
+			person_type_id => [],
+			place_type_id => [],
+			thing_type_id => [],
+			date_type_id => [],
+			'relationships' => []
+		}
+
+		seren_objects.each do |so|
+			ents = so.unique_entities
+			rels = so.entity_relationships
+
+			ents.each do |ent|
+				ent_info = from_unque_to_id_type(ent)
+				to_lookup[ent_info['entity_type']].push(ent_info['entity_id']) unless to_lookup[ent_info['entity_type']].include?(ent_info['entity_id'])
+			end
+
+			rels.keys.each do |rel_key|
+				to_lookup['relationships'].push(rels[rel_key]) unless to_lookup['relationships'].include?(rels[rel_key])
+			end
+		end
+
+		people = {}
+		ppl_res = Person.where(:id => to_lookup[person_type_id])
+		ppl_res.each do |ppl|
+			people[ppl.id] = ppl.to_s
+		end
+
+		places = {}
+		place_res = Place.where(:id => to_lookup[place_type_id])
+		place_res.each do |pl|
+			places[pl.id] = pl.to_s
+		end
+
+		things = {}
+		thing_res = Thing.where(:id => to_lookup[thing_type_id])
+		thing_res.each do |th|
+			things[th.id] = th.to_s
+		end
+
+		dates = {}
+		date_res = Ymddate.where(:id => to_lookup[date_type_id])
+		date_res.each do |dt|
+			dates[dt.id] = dt.to_s
+		end
+
+		relationships = {}
+		rels_res = RelationshipType.where(:id => to_lookup['relationships'])
+		rels_res.each do |rl|
+			relationships[rl.id] = rl.relationship_desc
+		end
+
+		descriptions = {
+			person_type_id => people,
+			place_type_id => places,
+			thing_type_id => things,
+			date_type_id => dates,
+			'relationships' => relationships
+		}
+
+		# puts 'Person len:  ' + people.length.to_s, 'Place len:  ' + places.length.to_s, 'Thing len:  ' + things.length.to_s, 'Date len:  ' + dates.length.to_s, 'Rels len:  ' + relationships.length.to_s, ''
+
+		# puts 'End-- get_seren_object_descriptions'
+
+		return descriptions
+
+	end
+
+	def build_seren_object_string(seren_obj, descriptions)
+
+		desc = ''
+
+		seren_obj.unique_entities.each do |ent|
+
+			entity_id = ent.slice(0,24).to_i(16)
+			entity_type = ent.slice(24,8).to_i(16)
+
+			rel_desc = ''
+			relation = seren_obj.entity_relationships[ent]
+
+			unless relation.blank?
+				rel_desc = ' <-- ' + descriptions['relationships'][relation]
+			end
+
+			desc += rel_desc + ' ' + descriptions[entity_type][entity_id]
+
+		end
+
+		return desc
+	end
+
+
 
 	# def moments_to_strings(moments)
 
