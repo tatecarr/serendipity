@@ -206,25 +206,58 @@ iteration_count += 1
 
 		moments = {}
 		@inactive_seren_objects.each do |iso|
+			
+
 			len = iso.length
-			if moments.keys.include?(len)
-				if moments_as_string
+
+			if moments_as_string
+
+
+
+				if moments.keys.include?(len)
 					moments[len] += [iso.to_s]
 				else
-					moments[len] += [iso]
-				end
-			else
-				if moments_as_string
 					moments[len] = [iso.to_s]
+				end
+
+
+
+			else
+				
+
+
+				if moments.keys.include?(len)
+					moments[len] += [iso]
 				else
 					moments[len] = [iso]
 				end
+
+
 			end
+
+
+
+			
+			# if moments.keys.include?(len)
+			# 	if moments_as_string
+			# 		moments[len] += [iso.to_s]
+			# 	else
+			# 		moments[len] += [iso]
+			# 	end
+			# else
+			# 	if moments_as_string
+			# 		moments[len] = [iso.to_s]
+			# 	else
+			# 		moments[len] = [iso]
+			# 	end
+			# end
+
+
 		end
 
-		moments.keys.sort.each do |hl|
-			puts 'Length of '+hl.to_s+':  '+moments[hl].length.to_s
-		end
+		# moments.keys.sort.each do |hl|
+		# 	puts 'Length of '+hl.to_s+':  '+moments[hl].length.to_s
+		# end
 
 		return moments
 
@@ -248,7 +281,7 @@ iteration_count += 1
 	# end
 
 
-
+	# <TODO> Can probably speed this up
 	def get_relevant_relations(entity_id, entity_type)
 
 		rels = Relationship.where('(source_id = ? and source_type = ?) or (target_id = ? and target_type = ?)', entity_id, entity_type, entity_id, entity_type)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130621202606) do
+ActiveRecord::Schema.define(:version => 20130712144236) do
 
   create_table "dbpedia_infos", :force => true do |t|
     t.string   "info_type_desc"
@@ -93,6 +93,14 @@ ActiveRecord::Schema.define(:version => 20130621202606) do
     t.date     "relationship_date"
     t.integer  "ymddate_id"
   end
+
+  add_index "relationships", ["id"], :name => "index_relationships_on_id"
+  add_index "relationships", ["relationship_type"], :name => "index_relationships_on_relationship_type"
+  add_index "relationships", ["source_id"], :name => "index_relationships_on_source_id"
+  add_index "relationships", ["source_type"], :name => "index_relationships_on_source_type"
+  add_index "relationships", ["target_id"], :name => "index_relationships_on_target_id"
+  add_index "relationships", ["target_type"], :name => "index_relationships_on_target_type"
+  add_index "relationships", ["ymddate_id"], :name => "index_relationships_on_ymddate_id"
 
   create_table "things", :force => true do |t|
     t.string   "name"
