@@ -149,7 +149,7 @@ class PlacesController < ApplicationController
 
       sc = SerenCollection.new
 
-      moments = sc.get_moments(places_ids, EntityType.find_by_entity_type_desc('Place').id, {'user_must_be_present' => true, 'curr_user_person_id' => current_user.person.id, 'min_user_dist_from_origin' => 4}, true)
+      moments = sc.get_moments(places_ids, EntityType.find_by_entity_type_desc('Place').id, {'user_must_be_present' => true, 'curr_user_person_id' => current_user.person.id, 'min_user_dist_from_origin' => 5}, true)
 
     end
 
