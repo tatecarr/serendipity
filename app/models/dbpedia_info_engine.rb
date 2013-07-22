@@ -20,6 +20,181 @@ class DbpediaInfoEngine < ActiveRecord::Base
 	end
 
 
+	def self.update_movie_cast_crew
+
+		apikey = '72e8b2d9b92fa0078ac6134eb743e8a4'
+
+		Tmdb.api_key = apikey
+		Tmdb.default_language = "en"
+
+		person_entity_type_id = EntityType.get_entity_type_id('Person')
+		thing_entity_type_id = EntityType.get_entity_type_id('Thing')
+		date_entity_type_id = EntityType.get_entity_type_id('Date')
+		place_entity_type_id = EntityType.get_entity_type_id('Place')
+		release_date_rel_type_id = RelationshipType.get_relationship_type_id('ReleaseDate')
+		movie_cast_rel_type_id = RelationshipType.get_relationship_type_id('MovieCast')
+		movie_crew_rel_type_id = RelationshipType.get_relationship_type_id('MovieCrew')
+		birthday_rel_type_id = RelationshipType.get_relationship_type_id('Birthday')
+		deathday_rel_type_id = RelationshipType.get_relationship_type_id('Deathday')
+		birthplace_rel_type_id = RelationshipType.get_relationship_type_id('Birthplace')
+
+		info_type_id = DbpediaInfo.get_or_create('MovieCastCrew')
+
+		# get the places that haven't had their "birthplace of" information retrieved yet
+		movies_to_update = Thing.where("type_desc = 'Movie' and id not in (select source_id from populated_infos where source_type = ? and dbpedia_info_id = ? and is_populated = ?)", thing_entity_type_id, info_type_id, true)
+
+		movies_to_update.each do |movie|
+			
+			begin
+
+
+				ActiveRecord::Base.transaction do
+
+
+					# get the movie info
+					tmdb_movie = TmdbMovie.find(:title => movie.name, :limit => 1)
+					
+					if tmdb_movie.blank?
+
+						# If the movie is not found -- populate the info record so we don't keep searching for it
+						PopulatedInfo.create(source_id:movie.id, source_type:thing_entity_type_id, dbpedia_info_id:info_type_id, is_populated:true)
+						DbpediaLog.create(source_id:movie.id, source_type:thing_entity_type_id, info_type_id:info_type_id, status:'success', added_relationships:0, log_message:movie.name)
+
+					else
+
+						# add release date and various relationships for movie
+
+						rd = tmdb_movie.release_date.split('-') unless tmdb_movie.release_date.blank?
+						ymddate_id = Ymddate.get_or_create(rd[0], rd[1], rd[2]).id unless rd.blank?
+
+						unless ymddate_id.blank?
+							Relationship.create_ignore_dupe(movie.id, thing_entity_type_id, ymddate_id, date_entity_type_id, release_date_rel_type_id, nil, nil)
+						end
+
+						# get the movie cast detailed info
+						unless tmdb_movie.cast.blank?
+							tmdb_movie.cast.each do |tmc|
+
+								curr_cast = TmdbCast.find(:id => tmc.id)
+
+								# create person record, checking if exists with same resource_id and resource_type
+								curr_person = Person.get_or_create(curr_cast.name, curr_cast.birthday, curr_cast.id, 'tmdb')
+
+								# create relationship to movie as "MovieCast"
+								Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, movie.id, thing_entity_type_id, movie_cast_rel_type_id, nil, nil)
+
+								# create relationship to birthday date -- Ymddate GET OR CREATE
+								bday = curr_cast.birthday.split('-') unless curr_cast.birthday.blank?
+								bday_ymddate_id = Ymddate.get_or_create(bday[0], bday[1], bday[2]).id unless bday.blank?
+
+								unless bday_ymddate_id.blank?
+									Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, bday_ymddate_id, date_entity_type_id, birthday_rel_type_id, nil, nil)
+								end
+
+
+								# create relationship to deathday date -- Ymddate GET OR CREATE
+								dday = curr_cast.deathday.split('-') unless curr_cast.deathday.blank?
+								dday_ymddate_id = Ymddate.get_or_create(dday[0], dday[1], dday[2]).id unless dday.blank?
+
+								unless dday_ymddate_id.blank?
+									Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, dday_ymddate_id, date_entity_type_id, deathday_rel_type_id, nil, nil)
+								end
+
+								# create relationship to place of birth location -- Place GET OR CREATE
+								lat = nil
+								long = nil
+								lat_long = nil
+								
+								unless curr_cast.place_of_birth.blank?
+									lat_long = Place.geocode_location(curr_cast.place_of_birth)
+								end
+
+								lat = lat_long['lat'] unless lat_long.blank?
+								long = lat_long['long'] unless lat_long.blank?
+
+								hometown = Place.get_or_create(lat, long, curr_cast.place_of_birth, 'City') unless curr_cast.place_of_birth.blank?
+
+								Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, hometown.id, place_entity_type_id, birthplace_rel_type_id, nil, nil) unless hometown.blank?
+
+							end
+						end
+
+						# get the movie crew detailed info
+						unless tmdb_movie.crew.blank?
+							tmdb_movie.crew.each do |tmc|
+
+								curr_crew = TmdbCast.find(:id => tmc.id)
+
+								# create person record, checking if exists with same resource_id and resource_type
+								curr_person = Person.get_or_create(curr_crew.name, curr_crew.birthday, curr_crew.id, 'tmdb')
+
+								# create relationship to movie as the "JOB" for the curr_crew -- or use "MovieCrew" if blank
+								if tmc.job.blank?
+									Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, movie.id, thing_entity_type_id, movie_crew_rel_type_id, nil, nil)
+								else
+									crew_job_rel_type_id = RelationshipType.get_relationship_type_id(tmc.job)
+									Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, movie.id, thing_entity_type_id, crew_job_rel_type_id, nil, nil)
+								end
+
+								# create relationship to birthday date -- Ymddate GET OR CREATE
+								bday = curr_crew.birthday.split('-') unless curr_crew.birthday.blank?
+								bday_ymddate_id = Ymddate.get_or_create(bday[0], bday[1], bday[2]).id unless bday.blank?
+
+								unless bday_ymddate_id.blank?
+									Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, bday_ymddate_id, date_entity_type_id, birthday_rel_type_id, nil, nil)
+								end
+
+
+								# create relationship to deathday date -- Ymddate GET OR CREATE
+								dday = curr_crew.deathday.split('-') unless curr_crew.deathday.blank?
+								dday_ymddate_id = Ymddate.get_or_create(dday[0], dday[1], dday[2]).id unless dday.blank?
+
+								unless dday_ymddate_id.blank?
+									Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, dday_ymddate_id, date_entity_type_id, deathday_rel_type_id, nil, nil)
+								end
+
+								# create relationship to place of birth location -- Place GET OR CREATE
+								lat = nil
+								long = nil
+								lat_long = nil
+								
+								unless curr_crew.place_of_birth.blank?
+									lat_long = Place.geocode_location(curr_crew.place_of_birth)
+								end
+
+								lat = lat_long['lat'] unless lat_long.blank?
+								long = lat_long['long'] unless lat_long.blank?
+
+								hometown = Place.get_or_create(lat, long, curr_crew.place_of_birth, 'City') unless curr_crew.place_of_birth.blank?
+
+								Relationship.create_ignore_dupe(curr_person.id, person_entity_type_id, hometown.id, place_entity_type_id, birthplace_rel_type_id, nil, nil) unless hometown.blank?
+
+							end
+						end
+
+						PopulatedInfo.create(source_id:movie.id, source_type:thing_entity_type_id, dbpedia_info_id:info_type_id, is_populated:true)
+						DbpediaLog.create(source_id:movie.id, source_type:thing_entity_type_id, info_type_id:info_type_id, status:'success', added_relationships:0, log_message:movie.name + ':  added movie related information')
+
+					end
+
+				end
+
+			rescue => ex_detail
+
+				# Log the current movie and the error message
+				# puts 'ERROR-----' + ex_detail.to_s
+				# puts ex_detail.backtrace.join("\n")
+				DbpediaLog.create(source_id:movie.id, source_type:thing_entity_type_id, info_type_id:info_type_id, status:'error', added_relationships:0, log_message:movie.name + ':  ' + ex_detail.to_s[0,(255-movie.name.length)])
+
+			end
+
+
+
+		end
+
+	end
+
+
 
 	def self.update_place_birthplace_info
 
@@ -209,7 +384,8 @@ class DbpediaInfoEngine < ActiveRecord::Base
 	    tmp_new_person = Person.get_or_create(
         con_res_vals['name'],
         tmp_format_date,
-        con_res_id
+        con_res_id,
+        'dbpedia'
       )
 
 

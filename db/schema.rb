@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130712144236) do
+ActiveRecord::Schema.define(:version => 20130719152654) do
 
   create_table "dbpedia_infos", :force => true do |t|
     t.string   "info_type_desc"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20130712144236) do
     t.boolean  "person_populated"
     t.string   "uid"
     t.string   "resource_id"
+    t.string   "resource_type"
   end
 
   create_table "places", :force => true do |t|

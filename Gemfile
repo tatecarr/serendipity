@@ -54,3 +54,4 @@ gem 'sparql-client'
 
 gem 'best_in_place'
 
+gem 'ruby-tmdb3'

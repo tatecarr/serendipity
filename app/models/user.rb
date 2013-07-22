@@ -592,7 +592,8 @@ puts 'hometown-----',hometown_lat,hometown_long,hometown_name,hometown_cat,'home
 	    tmp_new_person = Person.get_or_create(
         con_res_vals['name'],
         tmp_format_date,
-        con_res_id
+        con_res_id,
+        'dbpedia'
       )
 
 	    # puts tmp_new_person

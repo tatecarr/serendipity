@@ -43,6 +43,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    deepopenstruct (0.1.2)
     devise (2.2.3)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -138,6 +139,11 @@ GEM
       addressable (>= 2.2)
     rdoc (3.12.2)
       json (~> 1.4)
+    ruby-tmdb3 (0.3.4)
+      addressable
+      deepopenstruct
+      deepopenstruct (>= 0.1.2)
+      json
     sass (3.2.8)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -182,6 +188,7 @@ DEPENDENCIES
   omniauth-facebook
   pg
   rails (= 3.2.9)
+  ruby-tmdb3
   sass-rails (~> 3.2.3)
   sparql-client
   uglifier (>= 1.0.3)

@@ -1,0 +1,28 @@
+<h1>TMDB</h1>
+
+<h4>
+	<%= @movie.title %>
+</h4>
+
+<h4>Crew</h4>
+<p>
+	<%= @movie.crew.inspect %>
+</p>
+
+<p>
+	<%= @movie.cast.inspect %>
+</p>
+
+
+<p>
+	<%= image_tag @robert.poster.sizes.w92.url + @robert.profile_path %>
+</p>
+<p>
+	<%= @robert.name %>
+</p>
+<p>
+	<%= @robert.birthday %>
+</p>
+<p>
+	<%= @robert.place_of_birth %>
+</p>

@@ -225,6 +225,31 @@ class HomeController < ApplicationController
 		
 	end
 
+	def movie_info
+
+		apikey = '72e8b2d9b92fa0078ac6134eb743e8a4'
+
+		Tmdb.api_key = apikey
+		Tmdb.default_language = "en"
+
+
+		@movie = TmdbMovie.find(:title => "Iron Man", :limit => 1)
+		# => <OpenStruct>
+
+		puts @movie.inspect
+
+
+		@robert = TmdbCast.find(:id => 3223)
+
+		puts @robert.inspect
+		
+
+		@movie.title
+		# => "Iron Man"
+
+
+	end
+
 
 private
 
